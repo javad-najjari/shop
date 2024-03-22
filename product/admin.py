@@ -13,6 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
         form.base_fields['price'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['quantity'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['sales_count'].widget.attrs['style'] = 'width: 12em;'
+        form.base_fields['discount'].widget.attrs['style'] = 'width: 12em;'
         return form
     
     def product_title(self, obj):

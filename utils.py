@@ -48,7 +48,7 @@ def elapsed_time(created):
 
 def get_title(title, length=None):
     length = length or 30
-    return title if len(title) < length else title[:length]
+    return title if len(title) < length else title[:length] + ' ...'
 
 
 def format_price(number, lang='en'):

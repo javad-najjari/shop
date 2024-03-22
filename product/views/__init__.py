@@ -1,1 +1,1 @@
-from .home import HomeView
+from .home import HomeView, ProductListView

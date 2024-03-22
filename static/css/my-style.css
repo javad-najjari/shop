@@ -20,6 +20,10 @@ body {
   text-align: right;
 }
 
-.product-img-home {
+.product-img-height {
   height: 280px;
+}
+
+.text-small-size {
+  font-size: 0.6em;
 }
