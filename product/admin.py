@@ -4,8 +4,16 @@ from utils import get_title, format_price
 
 
 
+
+class ProductImageInline(admin.StackedInline):
+    model = ProductImage
+    min_num = 3
+    extra = 0
+
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_title', 'category', 'get_price', 'quantity', 'sales_count', 'has_cover', 'public')
+    list_display = ('product_title', 'category', 'get_price', 'quantity', 'sales_count', 'get_discount', 'has_cover', 'public')
+    inlines = [ProductImageInline]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -23,6 +31,12 @@ class ProductAdmin(admin.ModelAdmin):
     def get_price(self, obj):
         return format_price(obj.price, lang='en')
     get_price.short_description = 'price'
+
+    def get_discount(self, obj):
+        discount = obj.discount
+        if discount:
+            return f'{discount}%'
+        return '---'
 
     def has_cover(self, obj):
         return bool(obj.cover)
