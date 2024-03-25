@@ -27,3 +27,7 @@ body {
 .text-small-size {
   font-size: 0.6em;
 }
+
+.short-input {
+  width: 300px;
+}

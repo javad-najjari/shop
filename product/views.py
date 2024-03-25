@@ -1,6 +1,7 @@
+import random
 from django.views import generic
 from django.shortcuts import get_object_or_404
-from .models import Product, Category, ProductImage
+from .models import Product, ProductImage
 
 
 
@@ -37,7 +38,12 @@ class ProductDetailView(generic.DetailView):
         return get_object_or_404(Product, title=self.kwargs.get('product_title'))
     
     def get_context_data(self, **kwargs):
+        obj = self.get_object()
         context = super().get_context_data(**kwargs)
-        context['images'] = ProductImage.objects.filter(product=self.get_object())
+        context['images'] = ProductImage.objects.filter(product=obj)
+        suggestion_products = Product.objects.exclude(id=obj.id).filter(category=obj.category)
+        context['suggestion_products'] = sorted(
+            random.sample(list(suggestion_products), min(suggestion_products.count(), 8)), key=lambda x:x.created_at, reverse=True
+        )
         return context
 
