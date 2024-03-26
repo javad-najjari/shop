@@ -67,3 +67,22 @@ def format_price(number, lang='en'):
     
     return persian_numbers_converter(",".join(formatted_parts)[::-1])
 
+
+def filtering(queryset, request):
+    category = request.GET.get('category')
+    if category:
+        queryset = queryset.filter(category__title=category)
+    
+    sort = request.GET.get('sort')
+    if sort:
+        sort_keys = {
+            '1': '-created_at',
+            '2': 'created_at',
+            '3': 'price',
+            '4': '-price',
+        }
+        if sort in sort_keys:
+            queryset = queryset.order_by(sort_keys[sort])
+    
+    return queryset
+

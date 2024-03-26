@@ -9,42 +9,40 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
-            <div class="col-lg-3 col-md-4">
+            <div class="col-lg-3 col-md-4 pc-only">
                 <!-- Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">فیلتر با قیمت</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
-                            <span class="badge border font-weight-normal">1000</span>
+
+                    <!-- Price filtering -->
+                    <div class="d-flex">
+                        <div class="wrapper">
+                          <header>
+                            <h2>بازه قیمتی</h2>
+                          </header>
+                          <div class="price-input">
+                            <div class="field">
+                                <input type="number" class="input-max" value="{{ max_price }}">
+                            </div>
+                            <div class="separator">-</div>
+                            <div class="field">
+                              <input type="number" class="input-min" value="{{ min_price }}">
+                            </div>
+                          </div>
+                          <div class="slider">
+                            <div class="progress"></div>
+                          </div>
+                          <div class="range-input">
+                            <input type="range" class="range-min" min="{{ min_price }}" max="{{ max_price }}" value="{{ min_price }}" step="5000">
+                            <input type="range" class="range-max" min="{{ min_price }}" max="{{ max_price }}" value="{{ max_price }}" step="5000">
+                          </div>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
-                    </form>
+                    
+                      </div>
+                    
+                    <script src="{% static 'js/price.js' %}"></script>
+                    <!-- End price filtering -->
+                    
                 </div>
                 <!-- Price End -->
                 
@@ -138,19 +136,41 @@
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">ترتیب </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 1)">جدیدترین</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 2)">قدیمی ترین</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 3)">قیمت - کم به زیاد</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 4)">قیمت - زیاد به کم</a>
                                     </div>
                                 </div>
+                                
+                                <script>
+                                    function addQueryParam(event, key, value) {
+                                        event.preventDefault();
+                                        
+                                        const url = new URL(window.location.href);
+                                        const searchParams = new URLSearchParams(url.search);
+                                        
+                                        // Remove the existing 'key' parameter if it exists
+                                        searchParams.delete(key);
+                                        
+                                        // Add the new 'key' parameter
+                                        searchParams.append(key, value);
+                                        
+                                        url.search = searchParams.toString();
+                                        
+                                        // Redirect to the updated URL
+                                        window.location.href = url.toString();
+                                    }
+                                </script>
+
                                 <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">نمایش </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
+                                        <a class="dropdown-item" href="#">۹ تایی</a>
+                                        <a class="dropdown-item" href="#">۱۲ تایی</a>
+                                        <a class="dropdown-item" href="#">۱۵ تایی</a>
                                     </div>
                                 </div>
                             </div>
@@ -158,8 +178,8 @@
                     </div>
                     
                     {% for product in products %}
-                    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div class="product-item bg-light mb-2">
+                    <div class="col-lg-4 col-md-4 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
                             <a href="{% url 'product:detail' product.title %}" class="text-decoration-none">
                                 <div class="product-img position-relative overflow-hidden">
                                     <img class="img-fluid w-100 product-img-height"

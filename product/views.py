@@ -1,7 +1,8 @@
 import random
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views import generic
-from django.shortcuts import get_object_or_404
 from .models import Product, ProductImage
+from utils import filtering
 
 
 
@@ -11,8 +12,8 @@ class HomeView(generic.TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context['discounters'] = Product.objects.filter(discount__gt=0).order_by('-created_at')
-        context['recent_products'] = Product.objects.order_by('-created_at')[:8]
+        context['discounters'] = Product.objects.filter(discount__gt=0, public=True).order_by('-created_at')
+        context['recent_products'] = Product.objects.filter(public=True).order_by('-created_at')[:8]
         return context
 
 
@@ -21,10 +22,13 @@ class ProductListView(generic.TemplateView):
     template_name = 'product/shop.html'
 
     def get_context_data(self):
-        products = Product.objects.filter(public=True)
+        products = filtering(queryset=Product.objects.filter(public=True), request=self.request)
+        prices = products.values_list('price', flat=True)
 
         context = {
             'products': products,
+            'min_price': min(prices),
+            'max_price': max(prices),
         }
         return context
 
@@ -46,4 +50,25 @@ class ProductDetailView(generic.DetailView):
             random.sample(list(suggestion_products), min(suggestion_products.count(), 8)), key=lambda x:x.created_at, reverse=True
         )
         return context
+
+
+
+class SearchView(generic.ListView):
+    template_name = 'product/shop.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        title = self.request.GET.get('title')
+        products = filtering(queryset=Product.objects.filter(title__icontains=title), request=self.request)
+        return get_list_or_404(products)
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        prices = [product.price for product in self.get_queryset()]
+        
+        context['min_price'] = min(prices)
+        context['max_price'] = max(prices)
+
+        return context
+
 
