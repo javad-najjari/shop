@@ -34,7 +34,7 @@ class ProductAdmin(admin.ModelAdmin):
     product_title.short_description = 'title'
 
     def get_purchase_price(self, obj):
-        price = obj.purchase_price
+        price = format_price(obj.purchase_price)
         return format_html('<span style="color:green;">{}</span>', price)
     get_purchase_price.short_description = 'purchase price'
 
