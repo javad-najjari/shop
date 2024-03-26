@@ -26,6 +26,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
     cover = models.ImageField(upload_to='product_cover')
 
+    purchase_price = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
     quantity = models.SmallIntegerField()
     sales_count = models.PositiveIntegerField(default=0)

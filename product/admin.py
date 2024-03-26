@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import Category, Product, ProductImage
 from utils import get_title, format_price
 
@@ -12,12 +13,16 @@ class ProductImageInline(admin.StackedInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_title', 'category', 'get_price', 'quantity', 'sales_count', 'get_discount', 'has_cover', 'public')
+    list_display = (
+        'product_title', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
+        'sales_count', 'get_discount', 'has_cover', 'public'
+    )
     inlines = [ProductImageInline]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['title'].widget.attrs['style'] = 'width: 50em;'
+        form.base_fields['purchase_price'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['price'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['quantity'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['sales_count'].widget.attrs['style'] = 'width: 12em;'
@@ -25,12 +30,28 @@ class ProductAdmin(admin.ModelAdmin):
         return form
     
     def product_title(self, obj):
-        return get_title(obj.title)
+        return get_title(obj.title, length=20)
     product_title.short_description = 'title'
 
+    def get_purchase_price(self, obj):
+        price = obj.purchase_price
+        return format_html('<span style="color:green;">{}</span>', price)
+
     def get_price(self, obj):
-        return format_price(obj.price, lang='en')
+        price = format_price(obj.price, lang='en')
+        return format_html('<span style="color:blue;">{}</span>', price)
     get_price.short_description = 'price'
+
+    def after_discount(self, obj):
+        if obj.discount != 0:
+            price = format_price(obj.price_after_discount())
+        else:
+            price = '-'
+        return format_html('<span style="color:red;">{}</span>', price)
+    
+    def profit(self, obj):
+        profit_display = format_price(obj.price_after_discount() - obj.purchase_price)
+        return format_html('<span style="color:yellow;">{}</span>', profit_display)
 
     def get_discount(self, obj):
         discount = obj.discount
