@@ -35,7 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def get_cover(self, obj):
         if obj.cover:
-            return format_html('<img src="{}" style="max-height:30px;" />'.format(obj.cover.url))
+            return format_html('<img src="{}" style="max-height:30px;" loading="lazy"/>'.format(obj.cover.url))
     get_cover.short_description = 'cover'
 
     def get_purchase_price(self, obj):
@@ -80,7 +80,7 @@ class ProductImageAdmin(admin.ModelAdmin):
         return get_title(obj.product.title, length=50)
     
     def get_image(self, obj):
-        return format_html('<img src="{}" style="max-height:30px;" />'.format(obj.image.url))
+        return format_html('<img src="{}" style="max-height:30px;" loading="lazy"/>'.format(obj.image.url))
 
 
 
