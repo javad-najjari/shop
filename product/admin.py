@@ -14,7 +14,7 @@ class ProductImageInline(admin.StackedInline):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        'product_title', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
+        'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
         'sales_count', 'get_discount', 'has_cover', 'public'
     )
     inlines = [ProductImageInline]
@@ -32,6 +32,11 @@ class ProductAdmin(admin.ModelAdmin):
     def product_title(self, obj):
         return get_title(obj.title, length=20)
     product_title.short_description = 'title'
+
+    def get_cover(self, obj):
+        if obj.cover:
+            return format_html('<img src="{}" style="max-height:30px;" />'.format(obj.cover.url))
+    get_cover.short_description = 'cover'
 
     def get_purchase_price(self, obj):
         price = format_price(obj.purchase_price)
