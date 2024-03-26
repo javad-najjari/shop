@@ -36,6 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
     def get_purchase_price(self, obj):
         price = obj.purchase_price
         return format_html('<span style="color:green;">{}</span>', price)
+    get_purchase_price.short_description = 'purchase price'
 
     def get_price(self, obj):
         price = format_price(obj.price, lang='en')
@@ -58,6 +59,7 @@ class ProductAdmin(admin.ModelAdmin):
         if discount:
             return f'{discount}%'
         return '---'
+    get_discount.short_description = 'discount'
 
     def has_cover(self, obj):
         return bool(obj.cover)
