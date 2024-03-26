@@ -54,4 +54,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f'{self.product.title} - image'
+    
+    class Meta:
+        ordering = ('product',)
 

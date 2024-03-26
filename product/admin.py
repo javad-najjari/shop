@@ -73,6 +73,17 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product_title', 'get_image')
+
+    def product_title(self, obj):
+        return get_title(obj.product.title, length=50)
+    
+    def get_image(self, obj):
+        return format_html('<img src="{}" style="max-height:30px;" />'.format(obj.image.url))
+
+
+
 admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductImage)
+admin.site.register(ProductImage, ProductImageAdmin)
