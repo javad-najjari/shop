@@ -45,7 +45,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def get_price(self, obj):
         price = format_price(obj.price, lang='en')
-        return format_html('<span style="color:blue;">{}</span>', price)
+        return format_html('<span style="color:rgb(122, 122, 236);">{}</span>', price)
     get_price.short_description = 'price'
 
     def after_discount(self, obj):
@@ -53,7 +53,7 @@ class ProductAdmin(admin.ModelAdmin):
             price = format_price(obj.price_after_discount())
         else:
             price = '-'
-        return format_html('<span style="color:red;">{}</span>', price)
+        return format_html('<span style="color:rgb(216, 86, 86);">{}</span>', price)
     
     def profit(self, obj):
         profit_display = format_price(obj.price_after_discount() - obj.purchase_price)

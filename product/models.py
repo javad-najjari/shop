@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django_resized import ResizedImageField
 from utils import get_title, format_price
 
 
@@ -7,7 +8,7 @@ from utils import get_title, format_price
 
 class Category(models.Model):
     title = models.CharField(max_length=100)
-    cover = models.ImageField(upload_to='category_cover')
+    cover = ResizedImageField(upload_to='category_cover', force_format='WEBP', quality=100, size=[800, 800])
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -24,7 +25,7 @@ class Product(models.Model):
     introduction = models.TextField()
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
-    cover = models.ImageField(upload_to='product_cover')
+    cover = ResizedImageField(upload_to='product_cover', force_format='WEBP', quality=100, size=[800, 800])
 
     purchase_price = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
@@ -49,7 +50,7 @@ class Product(models.Model):
     
 
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to='product_images/%Y/%m/')
+    image = ResizedImageField(upload_to='product_images/%Y/%m/', force_format='WEBP', quality=100, size=[800, 800])
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
     def __str__(self):
