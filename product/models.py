@@ -21,7 +21,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     introduction = models.TextField()
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
@@ -58,4 +58,37 @@ class ProductImage(models.Model):
     
     class Meta:
         ordering = ('product',)
+
+
+
+class Color(models.Model):
+    color = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.color
+
+class Size(models.Model):
+    size = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.size
+
+
+
+
+class ProductSize(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True)
+    quantity = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['product', 'size']
+
+class ProductColor(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='colors')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True)
+    quantity = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['product', 'color']
 

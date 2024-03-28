@@ -27,8 +27,8 @@ class ProductListView(generic.TemplateView):
 
         context = {
             'products': products,
-            'min_price': min(prices),
-            'max_price': max(prices),
+            'min_price': min(prices) if prices else 0,
+            'max_price': max(prices) if prices else 0,
         }
         return context
 

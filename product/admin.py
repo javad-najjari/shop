@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Product, ProductImage
+from .models import Category, Product, ProductImage, Size, Color, ProductSize, ProductColor
 from utils import get_title, format_price
 
 
@@ -10,14 +10,29 @@ class ProductImageInline(admin.StackedInline):
     model = ProductImage
     min_num = 3
     extra = 0
+    verbose_name_plural = 'Images'
+
+class ProductSizeInline(admin.StackedInline):
+    model = ProductSize
+    min_num = 1
+    extra = 0
+    verbose_name = 'Size'
+    verbose_name_plural = 'Sizes'
+
+class ProductColorInline(admin.StackedInline):
+    model = ProductColor
+    min_num = 1
+    extra = 0
+    verbose_name = 'Color'
+    verbose_name_plural = 'Colors'
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
-        'sales_count', 'get_discount', 'has_cover', 'public'
+        'sales_count', 'get_discount', 'sizes', 'colors', 'public'
     )
-    inlines = [ProductImageInline]
+    inlines = [ProductSizeInline, ProductColorInline, ProductImageInline]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -66,10 +81,11 @@ class ProductAdmin(admin.ModelAdmin):
         return '---'
     get_discount.short_description = 'discount'
 
-    def has_cover(self, obj):
-        return bool(obj.cover)
-    has_cover.boolean = True
-    has_cover.short_description = 'cover'
+    def sizes(self, obj):
+        return ','.join([size.size.size for size in obj.sizes.all()])
+
+    def colors(self, obj):
+        return ','.join([color.color.color for color in obj.colors.all()])
 
 
 
@@ -87,3 +103,5 @@ class ProductImageAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
+admin.site.register(Size)
+admin.site.register(Color)
