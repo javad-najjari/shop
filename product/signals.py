@@ -1,7 +1,8 @@
 import os
-from .models import Category, Product, ProductImage
+from .models import Category, Product, ProductImage, ProductSizeColor
+from django.contrib import messages
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_delete
+from django.db.models.signals import pre_save, post_delete, post_save
 
 
 
@@ -83,4 +84,23 @@ def product_auto_delete_image_on_change(sender, instance, **kwargs):
     if old_image and old_image != new_image:
         if os.path.isfile(old_image.path):
             os.remove(old_image.path)
+
+
+
+
+
+# ================================================== Product Size Color ==================================================
+@receiver(post_save, sender=ProductSizeColor)
+def checkproduct_size_color_after_save(sender, instance, created, **kwargs):
+    duplicates = ProductSizeColor.objects.filter(product=instance.product, size=instance.size, color=instance.color)
+
+    # warning = False
+    for dup in duplicates:
+        dup_obj = duplicates.filter(product=dup.product, size=dup.size, color=dup.color)
+        if dup_obj.count() > 1:
+            # warning = True
+            dup_obj.last().delete()
+    
+    # if warning:
+    #     messages.error(kwargs['request'], 'Deleted duplicate data')
 

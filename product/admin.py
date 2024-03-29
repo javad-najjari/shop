@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Product, ProductImage, Size, Color, ProductSize, ProductColor
+from .models import Category, Product, ProductImage, Size, Color, ProductSizeColor
 from utils import get_title, format_price
 
 
@@ -12,27 +12,20 @@ class ProductImageInline(admin.StackedInline):
     extra = 0
     verbose_name_plural = 'Images'
 
-class ProductSizeInline(admin.StackedInline):
-    model = ProductSize
+class ProductSizeColorInline(admin.StackedInline):
+    model = ProductSizeColor
     min_num = 1
     extra = 0
-    verbose_name = 'Size'
-    verbose_name_plural = 'Sizes'
-
-class ProductColorInline(admin.StackedInline):
-    model = ProductColor
-    min_num = 1
-    extra = 0
-    verbose_name = 'Color'
-    verbose_name_plural = 'Colors'
+    verbose_name = 'size color'
+    verbose_name_plural = 'size color'
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
-        'sales_count', 'get_discount', 'sizes', 'colors', 'public'
+        'sales_count', 'get_discount', 'kinds', 'public'
     )
-    inlines = [ProductSizeInline, ProductColorInline, ProductImageInline]
+    inlines = [ProductSizeColorInline, ProductImageInline]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -81,11 +74,8 @@ class ProductAdmin(admin.ModelAdmin):
         return '---'
     get_discount.short_description = 'discount'
 
-    def sizes(self, obj):
-        return ','.join([size.size.size for size in obj.sizes.all()])
-
-    def colors(self, obj):
-        return ','.join([color.color.color for color in obj.colors.all()])
+    def kinds(self, obj):
+        return obj.size_color.count() or None
 
 
 
@@ -100,8 +90,17 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 
 
+class ProductSizeColorAdmin(admin.ModelAdmin):
+    list_display = ('get_product', 'size', 'color', 'quantity')
+
+    def get_product(self, obj):
+        return get_title(obj.product.title, length=50)
+
+
+
 admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Size)
 admin.site.register(Color)
+admin.site.register(ProductSizeColor, ProductSizeColorAdmin)

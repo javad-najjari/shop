@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django.core.exceptions import ValidationError
 from django_resized import ResizedImageField
 from utils import get_title, format_price
 
@@ -75,20 +76,18 @@ class Size(models.Model):
 
 
 
-
-class ProductSize(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')
-    size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True)
+class ProductSizeColor(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='size_color')
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True, blank=True)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField(default=0)
 
     class Meta:
-        unique_together = ['product', 'size']
-
-class ProductColor(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='colors')
-    color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True)
-    quantity = models.IntegerField(default=0)
-
-    class Meta:
-        unique_together = ['product', 'color']
+        unique_together = ['product', 'size', 'color']
+    
+    def clean(self):
+        size_bool, color_bool = bool(self.size), bool(self.color)
+        
+        if (size_bool or color_bool) and self.quantity < 1:
+            raise ValidationError({'quantity': 'Either enter a number greater than 0 or leave the above two fields blank'})
 
