@@ -86,3 +86,13 @@ def filtering(queryset, request):
     
     return queryset
 
+
+def get_types(obj):
+    size, color = obj.size, obj.color
+    if size and color:
+        return f'سایز {obj.size} - رنگ {obj.color}'
+    elif size:
+        return f'سایز {obj.size}'
+    elif color:
+        return f'رنگ {obj.color}'
+

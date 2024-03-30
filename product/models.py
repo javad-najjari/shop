@@ -30,7 +30,6 @@ class Product(models.Model):
 
     purchase_price = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
-    quantity = models.SmallIntegerField()
     sales_count = models.PositiveIntegerField(default=0)
     discount = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
 
@@ -67,12 +66,19 @@ class Color(models.Model):
 
     def __str__(self):
         return self.color
+    
+    class Meta:
+        ordering = ('color',)
 
 class Size(models.Model):
     size = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.size
+    
+    class Meta:
+        ordering = ('size',)
+
 
 
 
@@ -81,6 +87,9 @@ class ProductSizeColor(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True, blank=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.product.title[:20]} - {self.size} - {self.color} - {self.quantity}'
 
     class Meta:
         unique_together = ['product', 'size', 'color']

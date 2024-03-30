@@ -22,7 +22,7 @@ class ProductSizeColorInline(admin.StackedInline):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit', 'quantity',
+        'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit',
         'sales_count', 'get_discount', 'kinds', 'public'
     )
     inlines = [ProductSizeColorInline, ProductImageInline]
@@ -32,7 +32,6 @@ class ProductAdmin(admin.ModelAdmin):
         form.base_fields['title'].widget.attrs['style'] = 'width: 50em;'
         form.base_fields['purchase_price'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['price'].widget.attrs['style'] = 'width: 12em;'
-        form.base_fields['quantity'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['sales_count'].widget.attrs['style'] = 'width: 12em;'
         form.base_fields['discount'].widget.attrs['style'] = 'width: 12em;'
         return form

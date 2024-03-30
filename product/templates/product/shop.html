@@ -144,33 +144,12 @@
                                         <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 4)">قیمت - زیاد به کم</a>
                                     </div>
                                 </div>
-                                
-                                <script>
-                                    function addQueryParam(event, key, value) {
-                                        event.preventDefault();
-                                        
-                                        const url = new URL(window.location.href);
-                                        const searchParams = new URLSearchParams(url.search);
-                                        
-                                        // Remove the existing 'key' parameter if it exists
-                                        searchParams.delete(key);
-                                        
-                                        // Add the new 'key' parameter
-                                        searchParams.append(key, value);
-                                        
-                                        url.search = searchParams.toString();
-                                        
-                                        // Redirect to the updated URL
-                                        window.location.href = url.toString();
-                                    }
-                                </script>
-
                                 <div class="btn-group ml-2">
                                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">نمایش </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">۹ تایی</a>
-                                        <a class="dropdown-item" href="#">۱۲ تایی</a>
-                                        <a class="dropdown-item" href="#">۱۵ تایی</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 9)">۹ تایی</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 12)">۱۲ تایی</a>
+                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 15)">۱۵ تایی</a>
                                     </div>
                                 </div>
                             </div>
@@ -223,11 +202,31 @@
                     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</span></a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="" onclick="addQueryParam(event, 'page', {{ page_obj.previous_page_number }})">قبل</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="#">قبل</span></a></li>
+                            {% endif %}
+
+
+                            {% for num in paginator.page_range %}
+                                <li class="page-item">
+                                    <a class="page-link {% if request.GET.page|slugify != num|slugify %} num-paginate {% endif %}"
+                                    href="" onclick="addQueryParam(event, 'page', {{ num }})">
+                                    {{ num }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item"><a class="page-link" href="" onclick="addQueryParam(event, 'page', {{ page_obj.next_page_number }})">بعد</a></li>
+                                
+                            {% else %}
+                                <li class="page-item"><p class="page-link">بعد</p></li>
+                            {% endif %}
                           </ul>
                         </nav>
                     </div>
@@ -238,5 +237,25 @@
     </div>
     <!-- Shop End -->
 
+
+    <script>
+        function addQueryParam(event, key, value) {
+            event.preventDefault();
+            
+            const url = new URL(window.location.href);
+            const searchParams = new URLSearchParams(url.search);
+            
+            // Remove the existing 'key' parameter if it exists
+            searchParams.delete(key);
+            
+            // Add the new 'key' parameter
+            searchParams.append(key, value);
+            
+            url.search = searchParams.toString();
+            
+            // Redirect to the updated URL
+            window.location.href = url.toString();
+        }
+    </script>
 
 {% endblock content %}

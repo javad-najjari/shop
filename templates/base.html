@@ -117,7 +117,7 @@
                             </a>
                             &nbsp;&nbsp;
                             <a href="{% url 'account:cart' %}" class="btn px-0 ml-3" title="سبد خرید">
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{ cart_products_count }}</span>
                                 <i class="fas fa-shopping-cart text-primary"></i>
                             </a>
                         </div>

@@ -50,38 +50,17 @@
                     <p class="mb-4">{{ product.introduction }}</p>
 
 
-                    {% if sizes %}
-                        <div class="d-flex mb-3">
-                            <strong class="text-dark mr-3">سایزها :</strong>
-                            <form>
-                                {% for size in sizes %}
-                                    {% if size %}
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="size-1" name="{{ size }}">
-                                            <label class="custom-control-label" for="size-1">{{ size }}</label>
-                                        </div>
-                                    {% endif %}
+                    {% if types %}
+                        <div class="mb-4">
+                            <label for="dog-names">نوع محصول: </label> 
+                            <select name="dog-names" id="dog-names"> 
+                                {% for type in types %}
+                                    <option value="rigatoni">{{ type.text }}</option>
                                 {% endfor %}
-                            </form>
+                            </select>
                         </div>
                     {% endif %}
-
-
-                    {% if colors %}
-                        <div class="d-flex mb-4">
-                            <strong class="text-dark mr-3">رنگ ها :</strong>
-                            <form>
-                                {% for color in colors %}
-                                    {% if color %}
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="color-1" name="color">
-                                            <label class="custom-control-label" for="color-1">{{ color }}</label>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </form>
-                        </div>
-                    {% endif %}
+                
                     
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity ml-3" style="width: 130px;">
@@ -90,7 +69,7 @@
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="0" max="{{ product.quantity }}">
+                            <input type="text" class="form-control bg-secondary border-0 text-center" value="0" max="3">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-minus">
                                     <i class="fa fa-minus"></i>

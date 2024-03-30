@@ -8,6 +8,6 @@ def categories(request):
     category_filter = [category for category in all_categories if category.products.count() > 0]
 
     return {
-        'categories': category_filter
+        'categories': category_filter,
     }
 

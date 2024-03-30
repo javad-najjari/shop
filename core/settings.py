@@ -56,6 +56,7 @@ TEMPLATES = [
 
                 # custom context processors
                 'product.context_processor.categories',
+                'account.context_processor.cart_detail',
             ],
         },
     },
