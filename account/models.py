@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .manager import UserManager
 from product.models import ProductSizeColor
-from utils import get_title, format_price
+from utils import get_title, format_price, get_types
 
 
 
@@ -47,20 +47,23 @@ class UserAddress(models.Model):
 
 
 class Order(models.Model):
-    product = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
+    product_size_color = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return get_title(self.product.product.title, length=50)
+        return get_title(self.product_size_color.product.title, length=50)
 
     class Meta:
-        unique_together = ['product', 'quantity']
+        unique_together = ['product_size_color', 'quantity']
     
     def total_price(self):
-        return self.product.product.price_after_discount() * self.quantity
+        return self.product_size_color.product.price_after_discount() * self.quantity
     
     def total_price_fa(self):
         return format_price(self.total_price(), lang='fa')
+    
+    def product_types(self):
+        return get_types(self.product_size_color)
 
 
 
@@ -99,4 +102,13 @@ class Cart(models.Model):
     
     def total_price_fa(self):
         return format_price(self.total_price(), lang='fa')
+
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    order_code = models.CharField(max_length=10)
+    amount = models.CharField(max_length=50)
+    ref_id = models.CharField(max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
 

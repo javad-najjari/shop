@@ -4,8 +4,8 @@ from utils import get_user_cart
 
 
 
-class CartView(generic.TemplateView):
-    template_name = 'account/cart.html'
+class CheckoutView(generic.TemplateView):
+    template_name = 'account/checkout.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

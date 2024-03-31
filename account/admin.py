@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import User, Order, Cart, UserAddress
+from .models import User, Order, Cart, UserAddress, Payment
 from utils import elapsed_time
 
 
@@ -21,4 +21,5 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Order)
 admin.site.register(Cart)
 admin.site.register(UserAddress)
+admin.site.register(Payment)
 admin.site.unregister(Group)

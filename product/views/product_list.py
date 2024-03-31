@@ -7,7 +7,7 @@ from utils import filtering
 
 
 class ProductListView(generic.ListView):
-    template_name = 'product/shop.html'
+    template_name = 'product/product_list.html'
     context_object_name = 'products'
     paginate_by_param = 'size'
     paginate_by = 12

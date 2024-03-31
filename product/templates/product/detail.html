@@ -53,31 +53,37 @@
                     {% if types %}
                         <div class="mb-4">
                             <label for="dog-names">نوع محصول: </label> 
-                            <select name="dog-names" id="dog-names"> 
+                            <select name="dog-names" id="dog-names">
                                 {% for type in types %}
-                                    <option value="rigatoni">{{ type.text }}</option>
+                                    <option value="{{ type.size }}-{{ type.color }}">{{ type.text }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     {% endif %}
-                
                     
-                    <div class="d-flex align-items-center mb-4 pt-2">
-                        <div class="input-group quantity ml-3" style="width: 130px;">
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus">
-                                    <i class="fa fa-plus"></i>
-                                </button>
+                    
+                    {% for order in cart.orders.all %}
+                        {% if order.product_size_color.product == product %}
+                            <div class="d-flex align-items-center mb-4 pt-2">
+                                <div class="input-group quantity ml-3" style="width: 130px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control bg-secondary border-0 text-center" value="{{ order.quantity }}" disabled>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart ml-2"></i>افزودن به سبد خرید</button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="0" max="3">
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart ml-2"></i>افزودن به سبد خرید</button>
-                    </div>
+                        {% endif %}
+                    {% endfor %}
+                
+
                 </div>
             </div>
         </div>
@@ -240,9 +246,6 @@
         </div>
     </div>
 {% endif %}
-<!-- Products End -->
-
-<!-- Products End -->
 
 
 {% endblock content %}

@@ -136,17 +136,41 @@
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">ترتیب </button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                                        {% if request.GET.sort == '1' %}
+                                            جدیدترین
+                                        {% elif request.GET.sort == '2' %}
+                                            قدیمی ترین
+                                        {% elif request.GET.sort == '3' %}
+                                            قیمت-کم به زیاد
+                                        {% elif request.GET.sort == '4' %}
+                                            قیمت-زیاد به کم
+                                        {% else %}
+                                            ترتیب 
+                                        {% endif %}
+                                    </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 1)">جدیدترین</a>
-                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 2)">قدیمی ترین</a>
-                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 3)">قیمت - کم به زیاد</a>
-                                        <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'sort', 4)">قیمت - زیاد به کم</a>
+                                        <a class="dropdown-item" href="" onclick="removeQueryParam(event, 'sort')">پیش فرض</a>
+                                        <a class="dropdown-item" href="" onclick="addQueryParam(event, 'sort', 1)">جدیدترین</a>
+                                        <a class="dropdown-item" href="" onclick="addQueryParam(event, 'sort', 2)">قدیمی ترین</a>
+                                        <a class="dropdown-item" href="" onclick="addQueryParam(event, 'sort', 3)">قیمت - کم به زیاد</a>
+                                        <a class="dropdown-item" href="" onclick="addQueryParam(event, 'sort', 4)">قیمت - زیاد به کم</a>
                                     </div>
                                 </div>
                                 <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">نمایش </button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                                        {% if request.GET.size == '9' %}
+                                            ۹ تایی
+                                        {% elif request.GET.size == '12' %}
+                                            ۱۲ تایی
+                                        {% elif request.GET.size == '15' %}
+                                            ۱۵ تایی
+                                        {% else %}
+                                            نمایش 
+                                        {% endif %}
+                                    </button>
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#" onclick="removeQueryParam(event, 'size')">پیش فرض</a>
                                         <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 9)">۹ تایی</a>
                                         <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 12)">۱۲ تایی</a>
                                         <a class="dropdown-item" href="#" onclick="addQueryParam(event, 'size', 15)">۱۵ تایی</a>
@@ -171,65 +195,88 @@
                                         "
                                     alt="">
                                 </div>
-                                <div class="text-center py-4">
-                                    <p class="h6 text-decoration-none text-truncate">{{ product.title|truncatewords:5 }}</p>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        <h5 class="ml-4">
+                                <div class="py-3">
+                                    <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
+                                    
+                                    {% with product.quantity as count %}
+                                        {% if count == 0 %}
+                                            <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
+                                        {% elif count < 6 %}
+                                        <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
+                                        {% else %}
+                                            <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
+                                        {% endif %}
+                                    {% endwith %}
+
+                                    <div class="d-flex">
+                                        {% if product.discount != 0 %}
+                                        <h6 class="text-muted mr-5">
+                                            <del class="text-danger">{{ product.format_price_fa }}</del>
+                                        </h6>
+                                        {% endif %}
+                                        <h5 class="ml-2 custom-text-small-size">
                                             {{ product.price_after_discount_fa }}
                                             <small class="text-small-size">تومان</small>
                                         </h5>
-                                        {% if product.discount != 0 %}
-                                            <h6 class="text-muted ml-2">
-                                                <del class="text-danger">{{ product.format_price_fa }}</del>
-                                            </h6>
-                                        {% endif %}
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="far fa-star text-primary mr-1"></small>
-                                        &nbsp;&nbsp;
-                                        <!-- <small>(99)</small> -->
                                     </div>
                                 </div>
                             </a>
                         </div>
                     </div>
+                    {% empty %}
+                        <div class="text-center mt-5" style="width: 150%;">
+                            <h2 class="mb-4 pr-3 pl-3">متاسفانه محصولی با این نام پیدا نشد</h2>
+                            <p class="mb-5 pr-4 pl-4">ممکن است نام اشتباهی جستجو کرده باشید . یا محصول در سایت موجود نباشد</p>
+                            <a href="{% url 'product:list' %}">کل محصولات</a>
+                        </div>
                     {% endfor %}
                     
-                    <div class="col-12">
-                        <nav>
-                          <ul class="pagination justify-content-center">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="" onclick="addQueryParam(event, 'page', {{ page_obj.previous_page_number }})">قبل</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item"><a class="page-link" href="#">قبل</span></a></li>
-                            {% endif %}
+
+                    {% if page_obj and paginator.num_pages > 1 %}
+                        <div class="col-12">
+                            <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link num-paginate" href="" onclick="addQueryParam(event, 'page', {{ page_obj.previous_page_number }})">قبل</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item"><p class="page-link num-paginate num-paginate-hover">قبل</p></li>
+                                {% endif %}
 
 
-                            {% for num in paginator.page_range %}
-                                <li class="page-item">
-                                    <a class="page-link {% if request.GET.page|slugify != num|slugify %} num-paginate {% endif %}"
-                                    href="" onclick="addQueryParam(event, 'page', {{ num }})">
-                                    {{ num }}
-                                    </a>
-                                </li>
-                            {% endfor %}
+                                {% if not request.GET.page %}
+                                    {% for num in paginator.page_range %}
+                                        <li class="page-item">
+                                            <a class="page-link {% if num|slugify != '1' %} num-paginate {% endif %}"
+                                            href="" onclick="addQueryParam(event, 'page', {{ num }})">
+                                            {{ num }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for num in paginator.page_range %}
+                                        <li class="page-item">
+                                            <a class="page-link {% if request.GET.page|slugify != num|slugify %} num-paginate {% endif %}"
+                                            href="" onclick="addQueryParam(event, 'page', {{ num }})">
+                                            {{ num }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
 
 
-                            {% if page_obj.has_next %}
-                                <li class="page-item"><a class="page-link" href="" onclick="addQueryParam(event, 'page', {{ page_obj.next_page_number }})">بعد</a></li>
-                                
-                            {% else %}
-                                <li class="page-item"><p class="page-link">بعد</p></li>
-                            {% endif %}
-                          </ul>
-                        </nav>
-                    </div>
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link num-paginate" href="" onclick="addQueryParam(event, 'page', {{ page_obj.next_page_number }})">بعد</a></li>
+                                    
+                                {% else %}
+                                    <li class="page-item"><p class="page-link num-paginate num-paginate-hover">بعد</p></li>
+                                {% endif %}
+                            </ul>
+                            </nav>
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
             <!-- Shop Product End -->
@@ -239,21 +286,24 @@
 
 
     <script>
+        // adding query params
         function addQueryParam(event, key, value) {
             event.preventDefault();
             
             const url = new URL(window.location.href);
             const searchParams = new URLSearchParams(url.search);
-            
-            // Remove the existing 'key' parameter if it exists
             searchParams.delete(key);
-            
-            // Add the new 'key' parameter
             searchParams.append(key, value);
-            
             url.search = searchParams.toString();
-            
-            // Redirect to the updated URL
+            window.location.href = url.toString();
+        }
+
+
+        // removing query params
+        function removeQueryParam(event, key) {
+            event.preventDefault();
+            const url = new URL(window.location.href);
+            url.searchParams.delete(key);
             window.location.href = url.toString();
         }
     </script>

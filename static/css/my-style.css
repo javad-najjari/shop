@@ -28,6 +28,10 @@ a {
   color: #6C757D;
 }
 
+.num-paginate-hover:hover {
+  color: #6C757D;
+}
+
 .my-rtl-styles {
   direction: rtl;
   text-align: right;
@@ -248,3 +252,50 @@ input[type="range"]::-moz-range-thumb {
 
 
 
+
+
+/* messages styles */
+/* .alert {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  background-color: rgb(6, 165, 6);
+  color: white;
+  border-radius: 5px;
+  z-index: 9999;
+  height: auto;
+  font-size: 30px;
+} */
+
+
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.d-flex h5 {
+  order: 2; /* تگ h5 به سمت راست */
+  margin-right: auto; /* تگ h5 همواره به سمت چپ */
+}
+
+
+.two-lines {
+  height: 5em; /* برای دقیق‌تر بودن، می‌توانید این مقدار را تنظیم کنید */
+  overflow: hidden;
+  line-height: 1.7;
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+
+.extra-text {
+  font-size: 12px;
+}
+
+
+.custom-text-small-size {
+  font-size: 17px;
+}

@@ -69,9 +69,12 @@ def format_price(number, lang='en'):
 
 
 def filtering(queryset, request):
-    category = request.GET.get('category')
+    category, search = request.GET.get('category'), request.GET.get('search')
     if category:
         queryset = queryset.filter(category__title=category)
+    
+    if search:
+        queryset = queryset.filter(title__icontains=search)
     
     sort = request.GET.get('sort')
     if sort:
@@ -90,9 +93,17 @@ def filtering(queryset, request):
 def get_types(obj):
     size, color = obj.size, obj.color
     if size and color:
-        return f'سایز {obj.size} - رنگ {obj.color}'
+        return f'{obj.color} - سایز {obj.size}'
     elif size:
         return f'سایز {obj.size}'
     elif color:
-        return f'رنگ {obj.color}'
+        return f'{obj.color}'
+    return '-'
+
+
+def get_user_cart(user):
+    # return user.carts.filter(paid=False).last()
+
+    from account.models import Cart
+    return Cart.objects.filter(paid=False).last()
 
