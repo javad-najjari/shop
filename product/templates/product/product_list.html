@@ -185,14 +185,8 @@
                         <div class="product-item bg-light mb-4">
                             <a href="{% url 'product:detail' product.title %}" class="text-decoration-none">
                                 <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100 product-img-height"
-                                    src="
-                                        {% if product.cover %}
-                                            {{ product.cover.url }}
-                                        {% else %}
-                                            {% static 'img/no-image.png' %}
-                                        {% endif %}
-                                        "
+                                    <img class="img-fluid w-100 product-img-height "
+                                    src="{% if product.cover %} {{ product.cover.url }} {% else %} {% static 'img/no-image.png' %} {% endif %}"
                                     alt="">
                                 </div>
                                 <div class="py-3">
