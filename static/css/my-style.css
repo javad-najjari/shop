@@ -24,6 +24,10 @@ a {
   color: #6C757D;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .num-paginate {
   color: #6C757D;
 }
@@ -53,35 +57,54 @@ a {
   .mobile-only {
       display: none !important;
   }
+  .price-before-discount {
+    margin-right: 30px;
+  }
+  .mb-responsive {
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 767.98px) {
   .pc-only {
       display: none !important;
   }
+  .price-before-discount {
+    margin-right: 10px;
+  }
 }
 
 
 
 
 @media (max-width: 767.98px) {
-  .mobile-mode {
-    height: 120px;
-    width: 120px
-  }
   .product-img {
     position: relative;
     overflow: hidden;
     width: 120px;
     height: 120px;
+    margin-top: 10%;
   }
   .product-img img {
       position: absolute;
-      top: 0;
-      right: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+  }
+  .div-d-flex {
+    display: flex;
+  }
+  .product-item {
+    height: 200px;
+  }
+  .product-text-mobile {
+    width: 70%;
+    margin-top: 40px;
+  }
+  .product-text-mobile p {
+    font-size: 12px;
+  }
+  .custom-text-small-size {
+    margin-top: 35px
   }
 }
 
@@ -301,9 +324,10 @@ input[type="range"]::-moz-range-thumb {
   justify-content: space-between;
 }
 
-.d-flex h5 {
+.d-flex h5.custom-price {
   order: 2; /* تگ h5 به سمت راست */
   margin-right: auto; /* تگ h5 همواره به سمت چپ */
+  font-size: 16px;
 }
 
 

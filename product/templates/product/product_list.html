@@ -181,15 +181,15 @@
                     </div>
                     
                     {% for product in products %}
-                    <div class="col-lg-4 col-md-4 col-sm-6 pb-1">
-                        <div class="product-item bg-light mb-4">
-                            <a href="{% url 'product:detail' product.title %}" class="text-decoration-none">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100 product-img-height "
-                                    src="{% if product.cover %} {{ product.cover.url }} {% else %} {% static 'img/no-image.png' %} {% endif %}"
-                                    alt="">
+                    <div class="col-lg-4 col-md-4 col-sm-6 pb-1 mb-responsive">
+                        <div class="bg-light">
+                            <a href="{% url 'product:detail' product.title %}" class="div-d-flex product-item">
+                                <div class="product-img position-relative overflow-hidden mr-2">
+                                    <img class="img-fluid w-100 product-img-height"
+                                         src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
+                                         alt="">
                                 </div>
-                                <div class="py-3">
+                                <div class="py-3 product-text-mobile">
                                     <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
                                     
                                     {% with product.quantity as count %}
@@ -202,13 +202,13 @@
                                         {% endif %}
                                     {% endwith %}
 
-                                    <div class="d-flex">
+                                    <div class="d-flex custom-text-small-size">
                                         {% if product.discount != 0 %}
-                                        <h6 class="text-muted mr-5">
+                                        <h6 class="text-muted price-before-discount">
                                             <del class="text-danger">{{ product.format_price_fa }}</del>
                                         </h6>
                                         {% endif %}
-                                        <h5 class="ml-2 custom-text-small-size">
+                                        <h5 class="ml-2 custom-price">
                                             {{ product.price_after_discount_fa }}
                                             <small class="text-small-size">تومان</small>
                                         </h5>
@@ -227,7 +227,7 @@
                     
 
                     {% if page_obj and paginator.num_pages > 1 %}
-                        <div class="col-12">
+                        <div class="col-12 mt-5">
                             <nav>
                             <ul class="pagination justify-content-center">
                                 {% if page_obj.has_previous %}

@@ -96,48 +96,42 @@
                 <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">محصولات تخفیف دار</span></h2>
                 <div class="row px-xl-5">
                     {% for product in discounters %}
-                    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div class="product-item bg-light mb-4">
-                            <a href="{% url 'product:detail' product.title %}" class="text-decoration-none">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100 product-img-height" loading="lazy"
-                                    src="
-                                        {% if product.cover %}
-                                            {{ product.cover.url }}
-                                        {% else %}
-                                            {% static 'img/no-image.png' %}
-                                        {% endif %}
-                                        "
-                                    alt="">
-                                </div>
-                                <div class="py-3">
-                                    <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
-                                    
-                                    {% with product.quantity as count %}
-                                        {% if count == 0 %}
-                                            <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
-                                        {% elif count < 6 %}
-                                        <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
-                                        {% else %}
-                                            <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
-                                        {% endif %}
-                                    {% endwith %}
-
-                                    <div class="d-flex">
-                                        {% if product.discount != 0 %}
-                                        <h6 class="text-muted mr-5">
-                                            <del class="text-danger">{{ product.format_price_fa }}</del>
-                                        </h6>
-                                        {% endif %}
-                                        <h5 class="ml-2 custom-text-small-size">
-                                            {{ product.price_after_discount_fa }}
-                                            <small class="text-small-size">تومان</small>
-                                        </h5>
+                        <div class="col-lg-3 col-md-4 col-sm-6 pb-1 mb-responsive">
+                            <div class="bg-light">
+                                <a href="{% url 'product:detail' product.title %}" class="div-d-flex product-item">
+                                    <div class="product-img position-relative overflow-hidden mr-2">
+                                        <img class="img-fluid w-100 product-img-height"
+                                            src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
+                                            alt="">
                                     </div>
-                                </div>
-                            </a>
+                                    <div class="py-3 product-text-mobile">
+                                        <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
+                                        
+                                        {% with product.quantity as count %}
+                                            {% if count == 0 %}
+                                                <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
+                                            {% elif count < 6 %}
+                                            <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
+                                            {% else %}
+                                                <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
+                                            {% endif %}
+                                        {% endwith %}
+
+                                        <div class="d-flex custom-text-small-size">
+                                            {% if product.discount != 0 %}
+                                            <h6 class="text-muted price-before-discount">
+                                                <del class="text-danger">{{ product.format_price_fa }}</del>
+                                            </h6>
+                                            {% endif %}
+                                            <h6 class="ml-2">
+                                                {{ product.price_after_discount_fa }}
+                                                <small class="text-small-size">تومان</small>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -152,48 +146,42 @@
             <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">محصولات اخیر</span></h2>
             <div class="row px-xl-5">
                 {% for product in recent_products %}
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="product-item bg-light mb-4">
-                        <a href="{% url 'product:detail' product.title %}" class="text-decoration-none">
-                            <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100 product-img-height"
-                                src="
-                                    {% if product.cover %}
-                                        {{ product.cover.url }}
-                                    {% else %}
-                                        {% static 'img/no-image.png' %}
-                                    {% endif %}
-                                    "
-                                alt="">
-                            </div>
-                            <div class="py-3">
-                                <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
-                                
-                                {% with product.quantity as count %}
-                                    {% if count == 0 %}
-                                        <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
-                                    {% elif count < 6 %}
-                                    <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
-                                    {% else %}
-                                        <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
-                                    {% endif %}
-                                {% endwith %}
-
-                                <div class="d-flex">
-                                    {% if product.discount != 0 %}
-                                    <h6 class="text-muted mr-5">
-                                        <del class="text-danger">{{ product.format_price_fa }}</del>
-                                    </h6>
-                                    {% endif %}
-                                    <h5 class="ml-2 custom-text-small-size">
-                                        {{ product.price_after_discount_fa }}
-                                        <small class="text-small-size">تومان</small>
-                                    </h5>
+                    <div class="col-lg-3 col-md-4 col-sm-6 pb-1 mb-responsive">
+                        <div class="bg-light">
+                            <a href="{% url 'product:detail' product.title %}" class="div-d-flex product-item">
+                                <div class="product-img position-relative overflow-hidden mr-2">
+                                    <img class="img-fluid w-100 product-img-height"
+                                        src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
+                                        alt="">
                                 </div>
-                            </div>
-                        </a>
+                                <div class="py-3 product-text-mobile">
+                                    <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
+                                    
+                                    {% with product.quantity as count %}
+                                        {% if count == 0 %}
+                                            <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
+                                        {% elif count < 6 %}
+                                        <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
+                                        {% else %}
+                                            <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
+                                        {% endif %}
+                                    {% endwith %}
+
+                                    <div class="d-flex custom-text-small-size">
+                                        {% if product.discount != 0 %}
+                                        <h6 class="text-muted price-before-discount">
+                                            <del class="text-danger">{{ product.format_price_fa }}</del>
+                                        </h6>
+                                        {% endif %}
+                                        <h6 class="ml-2">
+                                            {{ product.price_after_discount_fa }}
+                                            <small class="text-small-size">تومان</small>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
         </div>
