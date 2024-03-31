@@ -9,7 +9,7 @@
     <!-- Shop Detail Start -->
     <div class="container-fluid pb-5">
         <div class="row px-xl-5">
-            <div class="col-lg-5 mb-30">
+            <div class="col-lg-5">
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner bg-light">
                         {% for image in images %}
@@ -25,21 +25,11 @@
                         <i class="fa fa-2x fa-angle-right text-dark"></i>
                     </a>
                 </div>
-            </div>            
+            </div>
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                    <h3>{{ product.title }}</h3>
-                    <div class="d-flex mb-3">
-                        <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star-half-alt"></small>
-                            <small class="far fa-star"></small>
-                        </div>
-                        <!-- <small class="pt-1">(99 Reviews)</small> -->
-                    </div>
+                    <h3 class="product-detail-title mb-5">{{ product.title }}</h3>
                     <h3 class="font-weight-semi-bold">{{ product.price_after_discount_fa }} <small>تومان</small></h3>
                     {% if product.discount != 0 %}
                         <h6 class="text-muted ml-2 mb-4">
@@ -202,46 +192,42 @@
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">محصولات پیشنهادی</span></h2>
         <div class="row px-xl-5">
             {% for s_p in suggestion_products %}
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <div class="product-item bg-light mb-2">
-                    <a href="{% url 'product:detail' s_p.title %}" class="text-decoration-none">
-                        <div class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100 product-img-height" loading="lazy"
-                            src="
-                                {% if s_p.cover %}
-                                    {{ s_p.cover.url }}
-                                {% else %}
-                                    {% static 'img/no-image.png' %}
-                                {% endif %}
-                                "
-                            alt="">
-                        </div>
-                        <div class="text-center py-4">
-                            <p class="h6 text-decoration-none text-truncate">{{ s_p.title|truncatewords:5 }}</p>
-                            <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5 class="ml-4">
-                                    {{ s_p.price_after_discount_fa }}
-                                    <small class="text-small-size">تومان</small>
-                                </h5>
-                                {% if s_p.discount != 0 %}
-                                    <h6 class="text-muted ml-2">
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 mb-responsive">
+                    <div class="bg-light">
+                        <a href="{% url 'product:detail' s_p.title %}" class="div-d-flex product-item">
+                            <div class="product-img position-relative overflow-hidden mr-2">
+                                <img class="img-fluid w-100 product-img-height"
+                                    src="{% if s_p.cover %}{{ s_p.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
+                                    alt="">
+                            </div>
+                            <div class="py-3 product-text-mobile">
+                                <p class="h6 two-lines mr-2 ml-2">{{ s_p.title|truncatewords:14 }}</p>
+                                
+                                {% with s_p.quantity as count %}
+                                    {% if count == 0 %}
+                                        <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
+                                    {% elif count < 6 %}
+                                    <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ s_p.quantity_fa }} عدد در انبار موجود است</p>
+                                    {% else %}
+                                        <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
+                                    {% endif %}
+                                {% endwith %}
+
+                                <div class="d-flex custom-text-small-size">
+                                    {% if s_p.discount != 0 %}
+                                    <h6 class="text-muted price-before-discount">
                                         <del class="text-danger">{{ s_p.format_price_fa }}</del>
                                     </h6>
-                                {% endif %}
+                                    {% endif %}
+                                    <h5 class="ml-2 custom-price">
+                                        {{ s_p.price_after_discount_fa }}
+                                        <small class="text-small-size">تومان</small>
+                                    </h5>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-center mb-1">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="far fa-star text-primary mr-1"></small>
-                                &nbsp;&nbsp;
-                                <!-- <small>(99)</small> -->
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>
