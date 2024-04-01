@@ -201,7 +201,7 @@
                                     alt="">
                             </div>
                             <div class="py-3 product-text-mobile">
-                                <p class="h6 two-lines mr-2 ml-2">{{ s_p.title|truncatewords:14 }}</p>
+                                <p class="h6 two-lines mr-2 ml-2 product-list-title">{{ s_p.title|truncatewords:14 }}</p>
                                 
                                 {% with s_p.quantity as count %}
                                     {% if count == 0 %}
@@ -219,10 +219,10 @@
                                         <del class="text-danger">{{ s_p.format_price_fa }}</del>
                                     </h6>
                                     {% endif %}
-                                    <h5 class="ml-2 custom-price">
+                                    <h6 class="ml-2 price-go-left real-price">
                                         {{ s_p.price_after_discount_fa }}
                                         <small class="text-small-size">تومان</small>
-                                    </h5>
+                                    </h6>
                                 </div>
                             </div>
                         </a>

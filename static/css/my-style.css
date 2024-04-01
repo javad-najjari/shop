@@ -319,20 +319,19 @@ input[type="range"]::-moz-range-thumb {
 
 
 
-.d-flex {
+.d-flex:not(.col-lg-3 > .d-flex) {
   display: flex;
   justify-content: space-between;
 }
 
-.d-flex h5.custom-price {
-  order: 2; /* تگ h5 به سمت راست */
-  margin-right: auto; /* تگ h5 همواره به سمت چپ */
-  font-size: 16px;
+.d-flex h6.price-go-left {
+  order: 2;
+  margin-right: auto;
 }
 
 
 .two-lines {
-  height: 5em; /* برای دقیق‌تر بودن، می‌توانید این مقدار را تنظیم کنید */
+  height: 5em;
   overflow: hidden;
   line-height: 1.7;
   font-size: 15px;
@@ -356,3 +355,167 @@ input[type="range"]::-moz-range-thumb {
 
 
 
+
+
+
+/* Menu bar */
+
+@media (max-width: 992px) {
+  .mobile-menu {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    display: flex;
+    justify-content: space-around;
+    z-index: 9999;
+    padding-bottom: 0px;
+}
+
+.menu-item {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+}
+
+.fa-solid {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+}
+
+
+@media (min-width: 500px) {
+  .menu-item {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 342px) {
+  .menu-item {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 316px) {
+  .menu-item {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 289px) {
+  .menu-item {
+    font-size: 6px;
+  }
+}
+
+@media (max-width: 262px) {
+  .menu-item {
+    font-size: 4px;
+  }
+}
+
+
+
+
+
+
+
+/* product list */
+
+@media (max-width: 360px) {
+  .price-before-discount {
+    font-size: 14px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 14px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 5px;
+  }
+}
+
+@media (max-width: 310px) {
+  .price-before-discount {
+    font-size: 12px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 12px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 280px) {
+  .price-before-discount {
+    font-size: 11px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 11px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 260px) {
+  .price-before-discount {
+    font-size: 10px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 10px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 250px) {
+  .price-before-discount {
+    font-size: 9px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 9px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 230px) {
+  .price-before-discount {
+    font-size: 8px;
+    margin-right: 0px;
+  }
+  .real-price {
+    font-size: 8px;
+  }
+  .product-list-title, .extra-text {
+    font-size: 11px;
+  }
+}
+
+
+
+
+
+.menu-item-unactive {
+  font-size: 20px;
+  color: #FFD43B;
+}
+
+.menu-item-active {
+  font-size: 20px;
+  color: white;
+}

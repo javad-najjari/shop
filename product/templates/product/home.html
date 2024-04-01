@@ -18,7 +18,9 @@
                                 <div class="p-3" style="max-width: 700px;">
                                     <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">فروشگاه آنلاین گرمه</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
-                                        فروشگاهی آنلاین مخصوص شهروندان <b>گرمه</b> ، <b>جاجرم</b> ، <b>ایور</b> و <b>درق</b> . ارسال فقط به این ۴ شهرستان انجام میشود
+                                        فروشگاهی آنلاین مخصوص شهروندان 
+                                        <b>گرمه</b> و سه شهرستان اطراف .
+                                        ارسال فقط به این چهار شهرستان انجام میشود
                                     </p>
                                     <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="{% url 'product:list' %}">
                                         بریم واسه خرید
@@ -35,28 +37,28 @@
 
 
     <!-- Featured Start -->
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-5 mb-4">
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
                     <h1 class="fa fa-check text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
                     <h5 class="font-weight-semi-bold m-0">کیفیت</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
                     <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1> &nbsp;&nbsp;&nbsp;
                     <h5 class="font-weight-semi-bold m-0">ارسال رایگان و سریع</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
                     <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
-                    <h5 class="font-weight-semi-bold m-0">هفت روز ضمانت بازگشت</h5>
+                    <h5 class="font-weight-semi-bold m-0">سه روز ضمانت بازگشت</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
                     <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
                     <h5 class="font-weight-semi-bold m-0">پشتیبانی</h5>
                 </div>
@@ -73,7 +75,7 @@
             {% for category in categories %}
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <a class="text-decoration-none" href="{% url 'product:list' %}?category={{ category.title }}">
-                        <div class="cat-item d-flex align-items-center mb-4">
+                        <div class="cat-item d-flex align-items-center">
                             <div class="overflow-hidden" style="width: 100px; height: 100px;">
                                 <img class="img-fluid" src="{{ category.cover.url }}" alt="">
                             </div>
@@ -92,7 +94,7 @@
 
     <!-- Products Start -->
         {% if discounters %}
-            <div class="container-fluid pt-5 pb-3">
+            <div class="container-fluid pt-5 pb-3 mt-4">
                 <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">محصولات تخفیف دار</span></h2>
                 <div class="row px-xl-5">
                     {% for product in discounters %}
@@ -105,7 +107,7 @@
                                             alt="">
                                     </div>
                                     <div class="py-3 product-text-mobile">
-                                        <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
+                                        <p class="h6 two-lines mr-2 ml-2 product-list-title">{{ product.title|truncatewords:14 }}</p>
                                         
                                         {% with product.quantity as count %}
                                             {% if count == 0 %}
@@ -123,7 +125,7 @@
                                                 <del class="text-danger">{{ product.format_price_fa }}</del>
                                             </h6>
                                             {% endif %}
-                                            <h6 class="ml-2">
+                                            <h6 class="ml-2 price-go-left real-price">
                                                 {{ product.price_after_discount_fa }}
                                                 <small class="text-small-size">تومان</small>
                                             </h6>
@@ -142,7 +144,7 @@
 
     <!-- Products Start -->
     {% if recent_products %}
-        <div class="container-fluid pt-5 pb-3">
+        <div class="container-fluid pt-5 pb-3 mt-4">
             <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">محصولات اخیر</span></h2>
             <div class="row px-xl-5">
                 {% for product in recent_products %}
@@ -155,7 +157,7 @@
                                         alt="">
                                 </div>
                                 <div class="py-3 product-text-mobile">
-                                    <p class="h6 two-lines mr-2 ml-2">{{ product.title|truncatewords:14 }}</p>
+                                    <p class="h6 two-lines mr-2 ml-2 product-list-title">{{ product.title|truncatewords:14 }}</p>
                                     
                                     {% with product.quantity as count %}
                                         {% if count == 0 %}
@@ -173,7 +175,7 @@
                                             <del class="text-danger">{{ product.format_price_fa }}</del>
                                         </h6>
                                         {% endif %}
-                                        <h6 class="ml-2">
+                                        <h6 class="ml-2 price-go-left real-price">
                                             {{ product.price_after_discount_fa }}
                                             <small class="text-small-size">تومان</small>
                                         </h6>
