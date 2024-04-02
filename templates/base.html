@@ -78,25 +78,25 @@
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-lg-0 px-0">
                     <a href="{% url 'product:home' %}" class="text-decoration-none d-block d-lg-none">
-                        <img src="{% static 'img/tpkala.png' %}" alt="" style="width: 140px; object-fit: cover; pointer-events: none; user-select: none;">
+                        <img src="{% static 'img/tpkala.png' %}" alt="" class="custom-logo">
                     </a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <form action="{% url 'product:list' %}" method="GET" class="mobile-only custom-search-box">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="جستجو" name="search">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="navbar-toggler pc-only" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="collapse navbar-collapse justify-content-between pc-only" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
-                            <form action="{% url 'product:list' %}" method="GET" class="mobile-only">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="جستجو" name="search">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
                             <a href="{% url 'product:list' %}" class="nav-item nav-link">محصولات</a>
-                            <a href="{% url 'account:cart' %}" class="nav-item nav-link">سبد خرید</a>
+                            <a href="{% url 'account:cart' %}" class="nav-item nav-link pc-only">سبد خرید</a>
                             <a href="{% url 'account:contact-us' %}" class="nav-item nav-link">تماس با ما</a>
                             <div class="nav-item dropdown mobile-only">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">دسته بندی ها <i class="fa fa-angle-down mt-1"></i></a>
@@ -162,24 +162,83 @@
     <div class="mobile-menu mobile-only">
         <a href="{% url 'product:home' %}" class="menu-item">
             <i class="fa fa-home {% if request.path == '/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            خانه
+            <span style="color: white;">خانه</span>
         </a>
         <a href="{% url 'account:cart' %}" class="menu-item">
             <i class="fa fa-shopping-basket {% if request.path == '/account/cart/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            سبد خرید
+            <span style="color: white;">سبد خرید</span>
         </a>
-        <a href="" class="menu-item">
-            <i class="fa fa-list-alt {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            دسته بندی
+        <a id="category-btn" class="menu-item mobile-only" data-toggle="modal" data-target="#myModal" onclick="changeCategoryIcon()">
+            <i id="category-icon" class="fa fa-list-alt {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+            <span style="color: white;">دسته بندی</span>
         </a>
         <a href="" class="menu-item">
             <i class="fa fa-user {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            حساب کاربری
+            <span style="color: white;">حساب من</span>
         </a>
     </div>
 
-    
+
+    <script>
+        function changeCategoryIcon() {
+            var categoryIcon = document.getElementById('category-icon');
+            if (categoryIcon.classList.contains('fa-list-alt')) {
+                categoryIcon.classList.remove('fa-list-alt');
+                categoryIcon.classList.add('fa-times');
+                categoryIcon.classList.remove('menu-item-unactive');
+                categoryIcon.classList.add('menu-item-active');
+            } else {
+                categoryIcon.classList.remove('fa-times');
+                categoryIcon.classList.add('fa-list-alt');
+                categoryIcon.classList.remove('menu-item-active');
+                categoryIcon.classList.add('menu-item-unactive');
+            }
+        }
+    </script>
+
     <!-- End mobile menu -->
+
+
+    <!-- Categories -->
+
+    <div style="height: 500px; margin-top: 50px;" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header sticky-header">
+                    <h5 class="modal-title" id="myModalLabel">دسته بندی ها</h5>
+                    <div class="d-flex justify-content-start">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="changeCategoryIcon()">
+                            <span aria-hidden="true" style="color: red; font-size: 40px;">&nbsp; &nbsp; &#x2715;</span>
+                        </button>
+                    </div>                    
+                </div>                
+                <div class="modal-body">
+                <!-- این قسمت محتوای داخل مدال است -->
+                    <div class="container-fluid pt-5">
+                        <div class="row px-xl-5 pb-3" style="margin-bottom: 100px;">
+                            {% for category in categories %}
+                                <div class="col-lg-6 col-md-6 col-sm-6 pb-1"> <!-- تغییر اینجا -->
+                                    <a class="text-decoration-none" href="{% url 'product:list' %}?category={{ category.title }}">
+                                        <div class="cat-item d-flex align-items-center">
+                                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                                <img class="img-fluid" src="{{ category.cover.url }}" alt="">
+                                            </div>
+                                            <div class="flex-fill pr-3">
+                                                <h6>{{ category.title }}</h6>
+                                                <small class="text-body">{{ category.product_count_fa }} محصول</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End categories -->
 
 
     
@@ -189,9 +248,10 @@
             <div class="col-lg-4 col-md-6 mb-5 pr-3 pr-xl-5">
                 <h5 class="text-secondary text-uppercase mb-4">راه های ارتباطی</h5>
                 <p class="mb-4">همشهریان گرامی، میتوانید از طریق راه های ارتباطی زیر با ما در تماس باشید و نظرات و انتقادات خود را مستقیما با ما مطرح کنید</p>
+                <p class="mb-0"><i class="fa fa-envelope text-primary mr-3"></i> از طریق سایت <a href="{% url 'account:contact-us' %}" class="text-secondary">( کلیک کنید )</a></p>
+                <p class="mb-0"><i class="fa fa-envelope text-primary mr-3"></i> javad.programmer100@gmail.com</p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i> 09908227202 &nbsp; نجاری</p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i> 09366205664 &nbsp; غلامی</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i> javad.programmer100@gmail.com</p>
             </div>
             <div class="col-lg-8 col-md-6">
                 <div class="row">

@@ -65,7 +65,7 @@ a:hover {
   }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 992px) {
   .pc-only {
       display: none !important;
   }
@@ -74,6 +74,17 @@ a:hover {
   }
 }
 
+
+
+
+@media (max-width: 767.98px) {
+  .pc-only-2 {
+      display: none !important;
+  }
+  .price-before-discount {
+    margin-right: 10px;
+  }
+}
 
 
 
@@ -536,4 +547,131 @@ input[type="range"]::-moz-range-thumb {
   body {
     padding-top: 100px; /* به اندازه‌ی ارتفاع هدر */
   }
+}
+
+
+
+
+
+.custom-logo {
+  width: 140px;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+
+
+
+/* search box */
+
+@media (min-width: 650px) {
+  .custom-search-box {
+    width: 400px;
+  }
+  .custom-logo {
+    width: 150px;
+  }
+}
+
+@media (min-width: 550px) {
+  .custom-search-box {
+    width: 350px;
+  }
+}
+
+@media (max-width: 440px) {
+  .custom-search-box {
+    width: 250px;
+  }
+}
+
+@media (max-width: 425px) {
+  .custom-search-box {
+    width: 230px;
+  }
+}
+
+@media (max-width: 405px) {
+  .custom-search-box {
+    width: 220px;
+  }
+  .custom-logo {
+    width: 130px;
+  }
+}
+
+@media (max-width: 387px) {
+  .custom-search-box {
+    width: 210px;
+  }
+  .custom-logo {
+    width: 120px;
+  }
+}
+
+@media (max-width: 365px) {
+  .custom-search-box {
+    width: 200px;
+  }
+  .custom-logo {
+    width: 110px;
+  }
+}
+
+@media (max-width: 345px) {
+  .custom-search-box {
+    width: 190px;
+  }
+  .custom-logo {
+    width: 100px;
+  }
+}
+
+@media (max-width: 325px) {
+  .custom-search-box {
+    width: 180px;
+  }
+  .custom-logo {
+    width: 90px;
+  }
+}
+
+@media (max-width: 305px) {
+  .custom-search-box {
+    width: 170px;
+  }
+  .custom-logo {
+    width: 80px;
+  }
+}
+
+@media (max-width: 285px) {
+  .custom-search-box {
+    width: 160px;
+  }
+  .custom-logo {
+    width: 70px;
+  }
+}
+
+@media (max-width: 265px) {
+  .custom-search-box {
+    width: 145px;
+  }
+  .custom-logo {
+    width: 55px;
+  }
+}
+
+
+
+
+
+.sticky-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: white;
 }

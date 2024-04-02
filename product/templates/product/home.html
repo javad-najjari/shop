@@ -40,27 +40,27 @@
     <div class="container-fluid pt-5 mb-4">
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 15px;">
                     <h1 class="fa fa-check text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
-                    <h5 class="font-weight-semi-bold m-0">کیفیت</h5>
+                    <h5 class="font-weight-semi-bold m-0">کیفیت </h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 15px;">
                     <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1> &nbsp;&nbsp;&nbsp;
-                    <h5 class="font-weight-semi-bold m-0">ارسال رایگان و سریع</h5>
+                    <h5 class="font-weight-semi-bold m-0">ارسال رایگان و سریع </h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 15px;">
                     <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
-                    <h5 class="font-weight-semi-bold m-0">سه روز ضمانت بازگشت</h5>
+                    <h5 class="font-weight-semi-bold m-0">سه روز ضمانت بازگشت </h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="d-flex align-items-center bg-light" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light" style="padding: 15px;">
                     <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1> &nbsp;&nbsp;&nbsp;
-                    <h5 class="font-weight-semi-bold m-0">پشتیبانی</h5>
+                    <h5 class="font-weight-semi-bold m-0">پشتیبانی </h5>
                 </div>
             </div>
         </div>
@@ -69,26 +69,30 @@
 
 
     <!-- Categories Start -->
-    <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">دسته بندی ها</span></h2>
-        <div class="row px-xl-5 pb-3">
-            {% for category in categories %}
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <a class="text-decoration-none" href="{% url 'product:list' %}?category={{ category.title }}">
-                        <div class="cat-item d-flex align-items-center">
-                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                                <img class="img-fluid" src="{{ category.cover.url }}" alt="">
-                            </div>
-                            <div class="flex-fill pr-3">
-                                <h6>{{ category.title }}</h6>
-                                <small class="text-body">{{ category.product_count_fa }} محصول</small>
-                            </div>
+    
+        <div class="modal-body pc-only">
+            <div class="container-fluid pt-5">
+                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">دسته بندی ها</span></h2>
+                <div class="row px-xl-5 pb-3">
+                    {% for category in categories %}
+                        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                            <a class="text-decoration-none" href="{% url 'product:list' %}?category={{ category.title }}">
+                                <div class="cat-item d-flex align-items-center">
+                                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                        <img class="img-fluid" src="{{ category.cover.url }}" alt="">
+                                    </div>
+                                    <div class="flex-fill pr-3">
+                                        <h6>{{ category.title }}</h6>
+                                        <small class="text-body">{{ category.product_count_fa }} محصول</small>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         </div>
-    </div>
+      
     <!-- Categories End -->
 
 
