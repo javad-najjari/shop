@@ -519,3 +519,21 @@ input[type="range"]::-moz-range-thumb {
   font-size: 20px;
   color: white;
 }
+
+
+
+@media (max-width: 992px) {
+  .custom-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+  }
+  
+  /* این خط کد برای اصلاح فضای بعد از هدر است */
+  body {
+    padding-top: 100px; /* به اندازه‌ی ارتفاع هدر */
+  }
+}
