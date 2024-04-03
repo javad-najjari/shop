@@ -25,11 +25,13 @@
                                 <td class="align-middle">
                                     <a href="{% url 'product:detail' order.product_size_color.product.title %}">
                                         <img src="{{ order.product_size_color.product.cover.url }}" alt="" style="width: 50px;">
-                                        {{ order.product_size_color.product.title|truncatewords:5 }}
+                                        <span style="font-size: 10px;">
+                                            {{ order.product_size_color.product.title|truncatewords:5 }}
+                                        </span>
                                     </a>
                                 </td>
-                                <td class="align-middle">{{ order.product_types }}</td>
-                                <td class="align-middle">{{ order.product_size_color.product.price_after_discount_fa }}</td>
+                                <td class="align-middle" style="font-size: 12px;">{{ order.product_types }}</td>
+                                <td class="align-middle" style="font-size: 14px;">{{ order.product_size_color.product.price_after_discount_fa }}</td>
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
                                         <div class="input-group-btn">
