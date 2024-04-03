@@ -64,6 +64,9 @@ class Order(models.Model):
     
     def product_types(self):
         return get_types(self.product_size_color)
+    
+    def product_types_list(self):
+        return get_types(self.product_size_color).split(' - ')
 
 
 

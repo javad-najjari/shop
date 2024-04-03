@@ -97,9 +97,14 @@ class ProductSizeColorAdmin(admin.ModelAdmin):
 
 
 
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ('color', 'color_code')
+
+
+
 admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Size)
-admin.site.register(Color)
+admin.site.register(Color, ColorAdmin)
 admin.site.register(ProductSizeColor, ProductSizeColorAdmin)

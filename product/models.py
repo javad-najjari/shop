@@ -48,12 +48,6 @@ class Product(models.Model):
     def price_after_discount_fa(self):
         return format_price(self.price_after_discount(), lang='fa')
     
-    def quantity(self):
-        return sum([obj.quantity for obj in self.size_color.all()])
-    
-    def quantity_fa(self):
-        return format_price(self.quantity(), lang='fa')
-    
 
 class ProductImage(models.Model):
     image = ResizedImageField(upload_to='product_images/%Y/%m/', force_format='WEBP', quality=100, size=[800, 800])
@@ -69,6 +63,7 @@ class ProductImage(models.Model):
 
 class Color(models.Model):
     color = models.CharField(max_length=20, unique=True)
+    color_code = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.color
@@ -93,6 +88,9 @@ class ProductSizeColor(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True, blank=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField(default=0)
+
+    def quantity_fa(self):
+        return format_price(self.quantity, lang='fa')
 
     def __str__(self):
         return f'{self.product.title[:20]} - {self.size} - {self.color} - {self.quantity}'
