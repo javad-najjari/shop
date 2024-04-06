@@ -2,7 +2,7 @@ import random
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from ..models import Product, ProductImage
-from utils import get_types, get_user_cart
+from utils import get_types, get_user_cart, get_quantity_in_cart
 
 
 
@@ -31,6 +31,11 @@ class ProductDetailView(generic.DetailView):
         context['suggestion_products'] = sorted(
             random.sample(list(suggestion_products), min(suggestion_products.count(), 8)), key=lambda x:x.created_at, reverse=True
         )
+
+        product_size_color_id = product_size_colors.first().id if product_size_colors else None
+
+        if product_size_color_id:
+            context['count_in_cart'] = get_quantity_in_cart(product_size_color_id=product_size_color_id, user=self.request.user)
 
         return context
 

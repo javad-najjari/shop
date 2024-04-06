@@ -7,7 +7,7 @@
 
     <!-- Cart Start -->
 
-    <h2 style="margin: 20px;">سبد خرید شما</h2>
+    <h2 class="mb-5" style="text-align: center;">سبد خرید شما</h2>
 
     <div class="col-lg-9 col-md-8">
         <div class="row pb-3">
@@ -17,19 +17,41 @@
                     <div class="bg-light">
                         <a href="{% url 'product:detail' order.product_size_color.product.title %}" class="div-d-flex product-item">
                             <div class="product-img position-relative overflow-hidden mr-2">
-                                <img class="img-fluid w-100 product-img-height"
+                                <img class="img-fluid product-img-height"
                                         src="{% if order.product_size_color.product.cover %}{{ order.product_size_color.product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
                                         alt="">
+                                <div class="d-flex flex-column align-items-center pt-2">
+                                    <div class="input-group quantity ml-3" style="width: 130px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control bg-secondary border-0 text-center" value="{{ order.quantity }}" disabled>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="py-3 product-text-mobile">
                                 <p class="h6 mr-3 ml-2 product-list-title">{{ order.product_size_color.product.title|truncatewords:14 }}</p>
 
-                                {% if order.product_size_color.color %}
-                                    <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
-                                        <span style='font-size:15px; color: {{ order.product_size_color.color.color_code }};'>&#9673;</span>
-                                        {{ order.product_size_color.color.color }}
-                                    </p>
-                                {% endif %}
+                                {% with order.product_size_color.color as color %}
+                                    {% if color %}
+                                        <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
+                                            {% if color.color_code == '#FFFFFF' %}
+                                                <span class="custom-circle">&#9673;</span>
+                                            {% else %}
+                                                <span style='font-size:20px; color: {{ color.color_code }};'>&#9673;</span>
+                                            {% endif %}
+                                            
+                                            {{ color.color }}
+                                        </p>
+                                    {% endif %}
+                                {% endwith %}
 
                                 {% if order.product_size_color.size %}
                                     <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
@@ -49,20 +71,20 @@
                                 {% endwith %}
 
                                 <div class="d-flex custom-text-small-size">
-                                {% if order.product_size_color.product.discount != 0 %}
-                                <h6 class="text-muted price-before-discount">
-                                    <del class="text-danger">{{ order.product_size_color.product.format_price_fa }}</del>
-                                </h6>
-                                {% endif %}
-                                <h6 class="ml-2 price-go-left real-price">
-                                    {{ order.product_size_color.product.price_after_discount_fa }}
-                                    <small class="text-small-size">تومان</small>
-                                </h6>
+                                    {% if order.product_size_color.product.discount != 0 %}
+                                        <h6 class="text-muted price-before-discount">
+                                            <del class="text-danger">{{ order.product_size_color.product.format_price_fa }}</del>
+                                        </h6>
+                                    {% endif %}
+                                    <h6 class="ml-2 price-go-left real-price">
+                                        {{ order.product_size_color.product.price_after_discount_fa }}
+                                        <small class="text-small-size">تومان</small>
+                                    </h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-            </div>
             {% empty %}
                 <div class="text-center mt-5" style="width: 150%;">
                     <h2 class="mb-4 pr-3 pl-3">سبد خرید شما خالیست</h2>

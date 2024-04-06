@@ -107,3 +107,13 @@ def get_user_cart(user):
     from account.models import Cart
     return Cart.objects.filter(paid=False).last()
 
+
+def get_quantity_in_cart(product_size_color_id, user):
+    orders = get_user_cart(user).orders.all()
+
+    order = orders.filter(product_size_color__id=product_size_color_id)
+    if order.exists():
+        return order.first().quantity
+    else:
+        return 0
+

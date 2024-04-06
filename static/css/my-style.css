@@ -672,3 +672,18 @@ input[type="range"]::-moz-range-thumb {
   z-index: 1000;
   background-color: white;
 }
+
+
+
+
+span.custom-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  text-align: center;
+  color: white;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+

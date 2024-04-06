@@ -17,8 +17,14 @@ class UserAdmin(admin.ModelAdmin):
         return elapsed_time(obj.created_at)
 
 
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('product_size_color', 'quantity')
+
+
+
 admin.site.register(User, UserAdmin)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(Cart)
 admin.site.register(UserAddress)
 admin.site.register(Payment)
