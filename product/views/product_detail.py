@@ -24,7 +24,7 @@ class ProductDetailView(generic.DetailView):
         product_size_colors = obj.size_color.select_related('size', 'color')
         if product_size_colors:
             context['types'] = [
-                {'id': obj.id,'text': get_types(obj),'size': obj.size,'color': obj.color,} for obj in product_size_colors
+                {'id': obj.id, 'text': get_types(obj), 'size': obj.size, 'color': obj.color,} for obj in product_size_colors
             ]
         
         suggestion_products = Product.objects.exclude(id=obj.id).filter(category=obj.category, public=True)

@@ -51,121 +51,118 @@
                         </div>
                     {% endif %}
 
-                    <div id="add-to-cart-view" class="hidden">
+                    <div id="quantity-in-cart-view" class="hidden">
                         
                     </div>
 
+                    <!-- در HTML -->
+                    <div id="spinner" class="spinner-border text-primary" role="status" style="display: none;">
+                    </div>
+                    
+
 
                     <script>
-
-                        // for when the page is loaded
-                        $(window).on('load', function() {
+                        // تعریف یک متغیر global برای ذخیره نوع دکمه کلیک شده
+                        var clickedButtonType = "";
+                    
+                        $(document).ready(function() {
+                            // بررسی تعداد محصول در سبد خرید هنگام بارگذاری صفحه
+                            var initialType = $('#dog-names').val();
+                            checkQuantityInCart(initialType);
+                    
+                            // بررسی تعداد محصول در سبد خرید هنگام تغییر نوع محصول توسط کاربر
+                            $('#dog-names').change(function() {
+                                var selectedType = $(this).val();
+                                checkQuantityInCart(selectedType);
+                            });
+                        });
+                    
+                        // تابع برای دریافت توکن CSRF از cookie
+                        function getCookie(name) {
+                            var cookieValue = null;
+                            if (document.cookie && document.cookie !== '') {
+                                var cookies = document.cookie.split(';');
+                                for (var i = 0; i < cookies.length; i++) {
+                                    var cookie = jQuery.trim(cookies[i]);
+                                    // دریافت توکن CSRF از cookie
+                                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                    }
+                                }
+                            }
+                            return cookieValue;
+                        }
+                    
+                        // تابعی که وضعیت افزودن به سبد خرید را بر اساس تعداد در سبد خرید بروزرسانی می‌کند
+                        function updateAddToCartButton(countInCart) {
+                            if (countInCart === 0) {
+                                $('#quantity-in-cart-view').html('<button id="quantity-in-cart-btn" class="btn btn-primary btn-block" onclick="setClickedButtonType(\'add\')">افزودن به سبد خرید</button>');
+                            } else {
+                                $('#quantity-in-cart-view').html('<div id="quantity-in-cart-btn" class="d-flex flex-column align-items-center pt-2"><div class="input-group quantity ml-3" style="width: 130px;"><div class="input-group-btn"><button class="btn btn-primary btn-plus" onclick="setClickedButtonType(\'add\')"><i class="fa fa-plus"></i></button></div><input type="number" class="form-control bg-secondary border-0 text-center" value="' + countInCart + '" disabled><div class="input-group-btn"><button class="btn btn-primary btn-minus" onclick="setClickedButtonType(\'minus\')"><i class="fa fa-minus"></i></button></div></div></div>');
+                            }
+                        };
+                    
+                        // تابع برای بررسی تعداد محصول در سبد خرید و بروزرسانی دکمه
+                        function checkQuantityInCart(selectedType) {
                             var csrftoken = getCookie('csrftoken');
-                            var selectedType = $('#dog-names').val();
-                            var countInCart = 0; // تنظیم متغیر countInCart به صفر به طور پیش‌فرض
-
                             $.ajax({
-                                url: '{% url "account:add-to-cart" %}',
+                                url: '{% url "account:quantity-in-cart" %}',
                                 type: 'POST',
                                 data: {
-                                    'selected_type': selectedType
+                                    'selected_type': selectedType,
+                                    'button': clickedButtonType,
                                 },
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
                                 success: function(response) {
-                                    // بررسی مقدار count_in_cart
-                                    countInCart = response.count_in_cart;
-                                    updateAddToCartButton(countInCart);
+                                    updateAddToCartButton(response.count_in_cart);
                                 },
                                 error: function(xhr, errmsg, err) {
                                     console.log(xhr.status + ": " + xhr.responseText);
                                 }
                             });
+                        }
+                    
 
-                            function updateAddToCartButton(countInCart) {
-                                if (countInCart === 0) {
-                                    $('#add-to-cart-view').html('<button id="add-to-cart-btn" class="btn btn-primary btn-block">افزودن به سبد خرید</button>');
-                                } else {
-                                    // استفاده از ورودی‌های number به جای دکمه‌ها
-                                    $('#add-to-cart-view').html('<div class="d-flex flex-column align-items-center pt-2"><div class="input-group quantity ml-3" style="width: 130px;"><div class="input-group-btn"><button class="btn btn-primary btn-plus"><i class="fa fa-plus"></i></button></div><input type="number" class="form-control bg-secondary border-0 text-center" value="' + countInCart + '" disabled><div class="input-group-btn"><button class="btn btn-primary btn-minus"><i class="fa fa-minus"></i></button></div></div></div>');
+                        // تابع برای تنظیم نوع دکمه کلیک شده
+                        function setClickedButtonType(buttonType) {
+                            clickedButtonType = buttonType;
+                        }
+                    
+                        // Add to cart and update UI
+                        $('#quantity-in-cart-view').on('click', '#quantity-in-cart-btn', function(event) {
+                            var selectedType = $('#dog-names').val();
+                            var csrftoken = getCookie('csrftoken');
+                    
+                            $('#spinner').show(); // Assuming a spinner is present
+                    
+                            $.ajax({
+                                url: '{% url "account:add-to-cart" %}',
+                                type: 'POST',
+                                data: {
+                                    'selected_type': selectedType,
+                                    'button': clickedButtonType,
+                                },
+                                headers: {
+                                    'X-CSRFToken': csrftoken
+                                },
+                                success: function(response) {
+                                    $('#spinner').hide();
+                                    // Assuming the response includes the new cart quantity
+                                    // fetchAndUpdateCartQuantity();
+                                    checkQuantityInCart(selectedType);
+                                },
+                                error: function(xhr, errmsg, err) {
+                                    console.log(xhr.status + ": " + xhr.responseText);
+                                    $('#spinner').hide();
                                 }
-                            }
-
-                            // تابع برای دریافت توکن CSRF از cookie
-                            function getCookie(name) {
-                                var cookieValue = null;
-                                if (document.cookie && document.cookie !== '') {
-                                    var cookies = document.cookie.split(';');
-                                    for (var i = 0; i < cookies.length; i++) {
-                                        var cookie = jQuery.trim(cookies[i]);
-                                        // دریافت توکن CSRF از cookie
-                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                            break;
-                                        }
-                                    }
-                                }
-                                return cookieValue;
-                            }
-                        });
-
-
-
-                        // for change type by user
-                        $(document).ready(function() {
-                            $('#dog-names').change(function() {
-                                var selectedType = $(this).val();
-                                var csrftoken = getCookie('csrftoken');
-                                var countInCart = 0; // تنظیم متغیر countInCart به صفر به طور پیش‌فرض
-                                
-                                $.ajax({
-                                    url: '{% url "account:add-to-cart" %}',
-                                    type: 'POST',
-                                    data: {
-                                        'selected_type': selectedType
-                                    },
-                                    headers: {
-                                        'X-CSRFToken': csrftoken
-                                    },
-                                    success: function(response) {
-                                        // بررسی مقدار count_in_cart
-                                        countInCart = response.count_in_cart;
-                                        updateAddToCartButton(countInCart);
-                                    },
-                                    error: function(xhr, errmsg, err) {
-                                        console.log(xhr.status + ": " + xhr.responseText);
-                                    }
-                                });
                             });
-                    
-                            function updateAddToCartButton(countInCart) {
-                                if (countInCart === 0) {
-                                    $('#add-to-cart-view').html('<button id="add-to-cart-btn" class="btn btn-primary btn-block">افزودن به سبد خرید</button>');
-                                } else {
-                                    // استفاده از ورودی‌های number به جای دکمه‌ها
-                                    $('#add-to-cart-view').html('<div class="d-flex flex-column align-items-center pt-2"><div class="input-group quantity ml-3" style="width: 130px;"><div class="input-group-btn"><button class="btn btn-primary btn-plus"><i class="fa fa-plus"></i></button></div><input type="number" class="form-control bg-secondary border-0 text-center" value="' + countInCart + '" disabled><div class="input-group-btn"><button class="btn btn-primary btn-minus"><i class="fa fa-minus"></i></button></div></div></div>');
-                                }
-                            }
-                    
-                            // تابع برای دریافت توکن CSRF از cookie
-                            function getCookie(name) {
-                                var cookieValue = null;
-                                if (document.cookie && document.cookie !== '') {
-                                    var cookies = document.cookie.split(';');
-                                    for (var i = 0; i < cookies.length; i++) {
-                                        var cookie = jQuery.trim(cookies[i]);
-                                        // دریافت توکن CSRF از cookie
-                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                            break;
-                                        }
-                                    }
-                                }
-                                return cookieValue;
-                            }
                         });
+                    
                     </script>
+                    
                     
                     
                 
