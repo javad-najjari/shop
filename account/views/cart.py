@@ -9,6 +9,8 @@ class CartView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart'] = get_user_cart(self.request.user)
+        cart = get_user_cart(self.request.user)
+        context['cart'] = cart
+        context['orders'] = cart.orders.order_by('product_size_color__product__title')
         return context
 

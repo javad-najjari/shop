@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.core.validators import MinValueValidator
 from .manager import UserManager
 from product.models import ProductSizeColor
 from utils import get_title, format_price, get_types
@@ -48,7 +49,7 @@ class UserAddress(models.Model):
 
 class Order(models.Model):
     product_size_color = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField()
+    quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
     def __str__(self):
         return get_title(self.product_size_color.product.title, length=50)

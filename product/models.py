@@ -96,6 +96,7 @@ class ProductSizeColor(models.Model):
         return f'{self.product.title[:20]} - {self.size} - {self.color} - {self.quantity}'
 
     class Meta:
+        ordering = ['product']
         unique_together = ['product', 'size', 'color']
     
     def clean(self):

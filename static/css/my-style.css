@@ -687,3 +687,24 @@ span.custom-circle {
   border-radius: 50%;
 }
 
+
+
+
+
+/* #quantity-in-cart-view {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 10000;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  justify-content: center;
+}
+
+.btn-plus, .btn-minus {
+  cursor: pointer;
+} */

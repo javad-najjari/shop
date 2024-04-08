@@ -97,15 +97,18 @@
                         // تابعی که وضعیت افزودن به سبد خرید را بر اساس تعداد در سبد خرید بروزرسانی می‌کند
                         function updateAddToCartButton(countInCart) {
                             if (countInCart === 0) {
-                                $('#quantity-in-cart-view').html('<button id="quantity-in-cart-btn" class="btn btn-primary btn-block" onclick="setClickedButtonType(\'add\')">افزودن به سبد خرید</button>');
+                                $('#quantity-in-cart-view').html('<button id="quantity-in-cart-btn" class="btn btn-primary btn-block disable-plus" onclick="setClickedButtonType(\'add\')">افزودن به سبد خرید</button>');
                             } else {
-                                $('#quantity-in-cart-view').html('<div id="quantity-in-cart-btn" class="d-flex flex-column align-items-center pt-2"><div class="input-group quantity ml-3" style="width: 130px;"><div class="input-group-btn"><button class="btn btn-primary btn-plus" onclick="setClickedButtonType(\'add\')"><i class="fa fa-plus"></i></button></div><input type="number" class="form-control bg-secondary border-0 text-center" value="' + countInCart + '" disabled><div class="input-group-btn"><button class="btn btn-primary btn-minus" onclick="setClickedButtonType(\'minus\')"><i class="fa fa-minus"></i></button></div></div></div>');
+                                $('#quantity-in-cart-view').html('<div id="quantity-in-cart-btn" class="d-flex flex-column align-items-center pt-2"><div class="input-group quantity ml-3" style="width: 130px;"><div class="input-group-btn"><button class="btn btn-primary btn-plus disable-plus" onclick="setClickedButtonType(\'add\')"><i class="fa fa-plus"></i></button></div><input type="number" class="form-control bg-secondary border-0 text-center" value="' + countInCart + '" disabled><div class="input-group-btn"><button class="btn btn-primary btn-minus" onclick="setClickedButtonType(\'minus\')"><i class="fa fa-minus"></i></button></div></div></div>');
                             }
                         };
                     
                         // تابع برای بررسی تعداد محصول در سبد خرید و بروزرسانی دکمه
                         function checkQuantityInCart(selectedType) {
                             var csrftoken = getCookie('csrftoken');
+
+                            $('#spinner').show(); // Assuming a spinner is present
+
                             $.ajax({
                                 url: '{% url "account:quantity-in-cart" %}',
                                 type: 'POST',
@@ -116,13 +119,26 @@
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
+                                
                                 success: function(response) {
+                                    $('#spinner').hide();
                                     updateAddToCartButton(response.count_in_cart);
+                                    if (response.limited_stock) {
+                                        $('#quantity-in-cart-btn .disable-plus').prop('disabled', true);
+                                    } else {
+                                        $('#quantity-in-cart-btn .disable-minus').prop('disabled', false);
+                                    }
                                 },
                                 error: function(xhr, errmsg, err) {
                                     console.log(xhr.status + ": " + xhr.responseText);
+                                    $('#spinner').hide();
+                                    var response = JSON.parse(xhr.responseText);
+                                    if (response.error) {
+                                        alert(response.error);
+                                    }
                                 }
                             });
+
                         }
                     
 

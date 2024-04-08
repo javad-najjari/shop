@@ -117,3 +117,7 @@ def get_quantity_in_cart(product_size_color_id, user):
     else:
         return 0
 
+
+def more_than_stock(product_size_color, count):
+    return (count + 1) > product_size_color.quantity
+
