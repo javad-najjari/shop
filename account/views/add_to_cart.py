@@ -8,7 +8,7 @@ from ..models import Order, ProductSizeColor
 
 
 
-class AddToCartView(LoginRequiredMixin, View):
+class AddToCartView(View):
 
     def post(self, request):
 
