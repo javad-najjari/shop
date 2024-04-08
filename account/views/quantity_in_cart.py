@@ -11,11 +11,13 @@ class QuantityInCartView(View):
 
     def post(self, request):
         type_id = request.POST.get('selected_type')
-        count_in_cart = get_quantity_in_cart(product_size_color_id=type_id, user=request.user)
-        limited_stock = more_than_stock(get_object_or_404(ProductSizeColor, id=type_id), count=count_in_cart)
+        
+        if type_id:
+            count_in_cart = get_quantity_in_cart(product_size_color_id=type_id, user=request.user)
+            limited_stock = more_than_stock(get_object_or_404(ProductSizeColor, id=type_id), count=count_in_cart)
 
-        return JsonResponse({
-            'count_in_cart': count_in_cart,
-            'limited_stock': limited_stock,
-        })
-
+            return JsonResponse({
+                'count_in_cart': count_in_cart,
+                'limited_stock': limited_stock,
+            })
+        

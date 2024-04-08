@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.http import JsonResponse
 
 
 
@@ -120,4 +121,51 @@ def get_quantity_in_cart(product_size_color_id, user):
 
 def more_than_stock(product_size_color, count):
     return (count + 1) > product_size_color.quantity
+
+
+def custom_sort_key(type_id):
+    def inner_sort_key(item):
+        if type_id.isdigit() and item.id == int(type_id):
+            return (0,)
+        else:
+            return (1, item.id)
+
+    return inner_sort_key
+
+
+
+
+def action_buttons(button, quantity, product_size_color, order, cart):
+    from account.models import Order
+
+    if button == 'add':
+        if quantity and more_than_stock(product_size_color, quantity):
+            print('/' * 50)
+            # return JsonResponse({'error': 'تعداد درخواستی بیشتر از موجودی است.'}, status=400)
+            return JsonResponse({})
+
+        if order:
+            print('*' * 50)
+            new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=quantity+1)[0]
+            cart.orders.add(new_order)
+            cart.orders.remove(order)
+            cart.save()
+        else:
+            print('-' * 50)
+            new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=1)[0]
+            cart.orders.add(new_order)
+            cart.save()
+    elif button == 'minus' and quantity > 0:
+        if order:
+            print('+' * 50)
+            if quantity != 1:
+                new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=quantity-1)[0]
+                cart.orders.add(new_order)
+            cart.orders.remove(order)
+            cart.save()
+        else:
+            print('0' * 50)
+            new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=1)[0]
+            cart.orders.add(new_order)
+            cart.save()
 

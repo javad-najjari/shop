@@ -15,7 +15,7 @@
             {% for order in orders %}
                 <div class="col-lg-4 col-md-4 col-sm-6 pb-1 mb-responsive">
                     <div class="bg-light">
-                        <a href="{% url 'product:detail' order.product_size_color.product.title %}" class="div-d-flex product-item">
+                        <a href="{% url 'product:detail' order.product_size_color.product.title %}?type_id={{ order.product_size_color.id }}" class="div-d-flex product-item">
                             <div class="product-img position-relative overflow-hidden mr-2">
                                 <img class="img-fluid product-img-height"
                                         src="{% if order.product_size_color.product.cover %}{{ order.product_size_color.product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"

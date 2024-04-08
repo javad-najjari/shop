@@ -64,6 +64,8 @@
                     <script>
                         // تعریف یک متغیر global برای ذخیره نوع دکمه کلیک شده
                         var clickedButtonType = "";
+                        
+                        var productId = "{{ product.id }}";
                     
                         $(document).ready(function() {
                             // بررسی تعداد محصول در سبد خرید هنگام بارگذاری صفحه
@@ -106,16 +108,22 @@
                         // تابع برای بررسی تعداد محصول در سبد خرید و بروزرسانی دکمه
                         function checkQuantityInCart(selectedType) {
                             var csrftoken = getCookie('csrftoken');
+                            $('#spinner').show();
 
-                            $('#spinner').show(); // Assuming a spinner is present
+                            if (!selectedType) {
+                                $('#spinner').hide();
+                                updateAddToCartButton(0);
+                                return;
+                            }
 
                             $.ajax({
                                 url: '{% url "account:quantity-in-cart" %}',
                                 type: 'POST',
-                                data: {
-                                    'selected_type': selectedType,
-                                    'button': clickedButtonType,
-                                },
+                                data: Object.assign(
+                                    {}, 
+                                    selectedType ? {'selected_type': selectedType} : {'product_id': productId}, 
+                                    {'button': clickedButtonType}
+                                ),
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
@@ -152,22 +160,21 @@
                             var selectedType = $('#dog-names').val();
                             var csrftoken = getCookie('csrftoken');
                     
-                            $('#spinner').show(); // Assuming a spinner is present
+                            $('#spinner').show();
                     
                             $.ajax({
                                 url: '{% url "account:add-to-cart" %}',
                                 type: 'POST',
-                                data: {
-                                    'selected_type': selectedType,
-                                    'button': clickedButtonType,
-                                },
+                                data: Object.assign(
+                                    {}, 
+                                    selectedType ? {'selected_type': selectedType} : {'product_id': productId}, 
+                                    {'button': clickedButtonType}
+                                ),
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
                                 success: function(response) {
                                     $('#spinner').hide();
-                                    // Assuming the response includes the new cart quantity
-                                    // fetchAndUpdateCartQuantity();
                                     checkQuantityInCart(selectedType);
                                 },
                                 error: function(xhr, errmsg, err) {
