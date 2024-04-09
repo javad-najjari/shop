@@ -64,8 +64,7 @@
                     <script>
                         // تعریف یک متغیر global برای ذخیره نوع دکمه کلیک شده
                         var clickedButtonType = "";
-                        
-                        var productId = "{{ product.id }}";
+                        var typeIdDefault = "{{ product.size_color.first.id }}"
                     
                         $(document).ready(function() {
                             // بررسی تعداد محصول در سبد خرید هنگام بارگذاری صفحه
@@ -74,7 +73,7 @@
                     
                             // بررسی تعداد محصول در سبد خرید هنگام تغییر نوع محصول توسط کاربر
                             $('#dog-names').change(function() {
-                                var selectedType = $(this).val();
+                                var selectedType = $(this).val() || typeIdDefault;
                                 checkQuantityInCart(selectedType);
                             });
                         });
@@ -110,7 +109,7 @@
                             var csrftoken = getCookie('csrftoken');
                             $('#spinner').show();
 
-                            if (!selectedType) {
+                            if (!selectedType & !typeIdDefault) {
                                 $('#spinner').hide();
                                 updateAddToCartButton(0);
                                 return;
@@ -119,11 +118,10 @@
                             $.ajax({
                                 url: '{% url "account:quantity-in-cart" %}',
                                 type: 'POST',
-                                data: Object.assign(
-                                    {}, 
-                                    selectedType ? {'selected_type': selectedType} : {'product_id': productId}, 
-                                    {'button': clickedButtonType}
-                                ),
+                                data: {
+                                    'selected_type': selectedType || typeIdDefault,
+                                    'button': clickedButtonType,
+                                },
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
@@ -157,7 +155,7 @@
                     
                         // Add to cart and update UI
                         $('#quantity-in-cart-view').on('click', '#quantity-in-cart-btn', function(event) {
-                            var selectedType = $('#dog-names').val();
+                            var selectedType = $('#dog-names').val() || typeIdDefault;
                             var csrftoken = getCookie('csrftoken');
                     
                             $('#spinner').show();
@@ -165,11 +163,10 @@
                             $.ajax({
                                 url: '{% url "account:add-to-cart" %}',
                                 type: 'POST',
-                                data: Object.assign(
-                                    {}, 
-                                    selectedType ? {'selected_type': selectedType} : {'product_id': productId}, 
-                                    {'button': clickedButtonType}
-                                ),
+                                data: {
+                                    'selected_type': selectedType,
+                                    'button': clickedButtonType,
+                                },
                                 headers: {
                                     'X-CSRFToken': csrftoken
                                 },
