@@ -51,7 +51,7 @@
             <div class="bg-light p-30 mb-5">
                 <div class="border-bottom">
                     <h6 class="mb-3">کالاها</h6>
-                    {% for order in cart.orders.all %}
+                    {% for order in orders %}
                         <div class="d-flex justify-content-between">
                             <p title="{{ order.product_size_color.product.title }}">{{ order.product_size_color.product.title|truncatewords:5 }}</p>
                             <p>{{ order.total_price_fa }}</p>

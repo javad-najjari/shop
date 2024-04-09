@@ -48,6 +48,7 @@ class UserAddress(models.Model):
 
 
 class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     product_size_color = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 

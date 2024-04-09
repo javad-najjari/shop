@@ -14,45 +14,39 @@ from django.db import connection
 class AddToCartView(View):
 
     def post(self, request):
+        # TODO: 2 lines below must change
+        from ..models import User
+        user = User.objects.first()
 
         type_id = request.POST.get('selected_type')
         button = request.POST.get('button')
 
-        print(f'{"="*50} Start => {len(connection.queries)} queries {"="*50}')
+        print(f'{"="*30} {len(connection.queries)}', end=' => ')
 
-        cart = get_user_cart(request.user)
         product_size_color = get_object_or_404(ProductSizeColor, id=type_id)
-        order = cart.orders.filter(product_size_color=product_size_color).first()
+        cart = get_user_cart(user)
+        orders = cart.orders.all()
 
-        quantity = order.quantity if order else None
+        order = orders.filter(product_size_color=product_size_color, user=user).last()
+        if not order:
+            order = Order.objects.create(user=user, product_size_color=product_size_color, quantity=0)
+            cart.orders.add(order)
+            cart.save()
+
+        quantity = order.quantity
 
         if button == 'add':
-            if quantity and more_than_stock(product_size_color, quantity):
+            if more_than_stock(product_size_color, quantity):
                 # return JsonResponse({'error': 'تعداد درخواستی بیشتر از موجودی است.'}, status=400)
                 return JsonResponse({})
+            order.quantity += 1
+            order.save()
 
-            if order:
-                new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=quantity+1)[0]
-                cart.orders.add(new_order)
-                cart.orders.remove(order)
-                cart.save()
-            else:
-                new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=1)[0]
-                cart.orders.add(new_order)
-                cart.save()
         elif button == 'minus' and quantity > 0:
-            if order:
-                if quantity != 1:
-                    new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=quantity-1)[0]
-                    cart.orders.add(new_order)
-                cart.orders.remove(order)
-                cart.save()
-            else:
-                new_order = Order.objects.get_or_create(product_size_color=product_size_color, quantity=1)[0]
-                cart.orders.add(new_order)
-                cart.save()
+            order.quantity -= 1
+            order.save()
         
-        print(f'{"="*50} End => {len(connection.queries)} queries {"="*50}')
+        print(f'{len(connection.queries)} {"="*30}')
 
         return JsonResponse({
             

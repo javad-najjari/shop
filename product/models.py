@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Exists, OuterRef
 from django.core.validators import MaxValueValidator
 from django.core.exceptions import ValidationError
 from django_resized import ResizedImageField
@@ -36,8 +37,19 @@ class Product(models.Model):
     public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # available = models.BooleanField(default=False)
+
     def __str__(self):
         return get_title(self.title)
+    
+    def quantity(self):
+        return sum(obj.quantity for obj in self.size_color.all())
+    
+    def quantity_fa(self):
+        return format_price(self.quantity(), lang='fa')
+    
+    def is_available(self):
+        return ProductSizeColor.objects.filter(product=self, quantity__gt=0).exists()
     
     def format_price_fa(self):
         return format_price(self.price, lang='fa')

@@ -20,24 +20,14 @@
                                 <img class="img-fluid product-img-height"
                                         src="{% if order.product_size_color.product.cover %}{{ order.product_size_color.product.cover.url }}{% else %}{% static 'img/no-image.png' %}{% endif %}"
                                         alt="">
-                                <div class="d-flex flex-column align-items-center pt-2">
-                                    <div class="input-group quantity ml-3" style="width: 130px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary btn-plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control bg-secondary border-0 text-center" value="{{ order.quantity }}" disabled>
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary btn-minus">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="py-3 product-text-mobile">
                                 <p class="h6 mr-3 ml-2 product-list-title">{{ order.product_size_color.product.title|truncatewords:14 }}</p>
+
+                                <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    {{ order.quantity }}
+                                </p>
 
                                 {% with order.product_size_color.color as color %}
                                     {% if color %}
@@ -52,35 +42,48 @@
                                         </p>
                                     {% endif %}
                                 {% endwith %}
-
-                                {% if order.product_size_color.size %}
-                                    <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
-                                        <span style='font-size:25px;'>&#8597;</span>
-                                        سایز {{ order.product_size_color.size.size }}
-                                    </p>
-                                {% endif %}
                                 
-                                {% with order.product_size_color.quantity as count %}
-                                    {% if count == 0 %}
-                                        <p class="h6 extra-text mr-3 ml-2 text-muted">در انبار موجود نیست</p>
-                                    {% elif count < 6 %}
-                                        <p class="h6 extra-text mr-3 ml-2 text-danger">فقط {{ order.product_size_color.quantity_fa }} عدد در انبار موجود است</p>
-                                    {% else %}
-                                        <p class="h6 extra-text mr-3 ml-2">موجود در انبار</p>
+                                {% with order.product_size_color.size as size %}
+                                    {% if size %}
+                                        <p class="h6 extra-text mr-3 ml-2" style="font-size: 15px; display: inline-block;">
+                                            <span style='font-size:25px;'>&#8597;</span>
+                                            سایز {{ size.size }}
+                                        </p>
                                     {% endif %}
                                 {% endwith %}
+                                
+                                {% with order.product_size_color.product.quantity as count %}
+                                    {% with order.product_size_color.product as order_product %}
+                                        {% if count == 0 or not order_product.is_available %}
+                                            <p class="h6 extra-text mr-2 ml-2 text-muted">
+                                                <i class="fas fa-times-circle text-danger product-status"></i>
+                                                ناموجود
+                                            </p>
+                                        {% elif count < 6 %}
+                                            <p class="h6 extra-text mr-2 ml-2 text-muted">
+                                                <i class="fas fa-check-circle text-success product-status"></i>
+                                                فقط {{ order_product.quantity_fa }} عدد موجود است
+                                            </p>
+                                        {% else %}
+                                            <p class="h6 extra-text mr-2 ml-2" style="visibility: hidden;">
+                                                موجود در انبار
+                                            </p>
+                                        {% endif %}
 
-                                <div class="d-flex custom-text-small-size">
-                                    {% if order.product_size_color.product.discount != 0 %}
-                                        <h6 class="text-muted price-before-discount">
-                                            <del class="text-danger">{{ order.product_size_color.product.format_price_fa }}</del>
-                                        </h6>
-                                    {% endif %}
-                                    <h6 class="ml-2 price-go-left real-price">
-                                        {{ order.product_size_color.product.price_after_discount_fa }}
-                                        <small class="text-small-size">تومان</small>
-                                    </h6>
-                                </div>
+                                        <div class="d-flex custom-text-small-size">
+                                            {% if order_product.discount != 0 %}
+                                                <h6 class="text-muted price-before-discount">
+                                                    <del class="text-danger">{{ order_product.format_price_fa }}</del>
+                                                </h6>
+                                            {% endif %}
+                                            <h6 class="ml-2 price-go-left real-price">
+                                                {{ order_product.price_after_discount_fa }}
+                                                <small class="text-small-size">تومان</small>
+                                            </h6>
+                                        </div>
+
+                                    {% endwith %}
+                                {% endwith %}
                             </div>
                         </a>
                     </div>

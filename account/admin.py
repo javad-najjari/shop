@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('product_size_color', 'quantity')
+    list_display = ('user', 'product_size_color', 'quantity')
 
 
 

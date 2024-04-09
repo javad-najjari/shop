@@ -11,19 +11,28 @@
                     <p class="h6 two-lines mr-2 ml-2 product-list-title">{{ product.title|truncatewords:14 }}</p>
                     
                     {% with product.quantity as count %}
-                        {% if count == 0 %}
-                            <p class="h6 extra-text mr-2 ml-2 text-muted">در انبار موجود نیست</p>
+                        {% if count == 0 or not product.is_available %}
+                            <p class="h6 extra-text mr-2 ml-2 text-muted">
+                                <i class="fas fa-times-circle text-danger product-status"></i>
+                                ناموجود
+                            </p>
                         {% elif count < 6 %}
-                        <p class="h6 extra-text mr-2 ml-2 text-danger">فقط {{ product.quantity_fa }} عدد در انبار موجود است</p>
+                            <p class="h6 extra-text mr-2 ml-2 text-muted">
+                                <i class="fas fa-check-circle text-success product-status"></i>
+                                فقط {{ product.quantity_fa }} عدد موجود است
+                            </p>
                         {% else %}
-                            <p class="h6 extra-text mr-2 ml-2">موجود در انبار</p>
+                            <p class="h6 extra-text mr-2 ml-2">
+                                <i class="fas fa-check-circle text-success product-status"></i>
+                                موجود در انبار
+                            </p>
                         {% endif %}
                     {% endwith %}
 
                     <div class="d-flex custom-text-small-size">
                         {% if product.discount != 0 %}
                         <h6 class="text-muted price-before-discount">
-                            <del class="text-danger">{{ product.format_price_fa }}</del>
+                            <del>{{ product.format_price_fa }}</del>
                         </h6>
                         {% endif %}
                         <h6 class="ml-2 price-go-left real-price">

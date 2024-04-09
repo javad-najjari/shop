@@ -40,6 +40,8 @@ class ProductDetailView(generic.DetailView):
 
         if product_size_color_id:
             context['count_in_cart'] = get_quantity_in_cart(product_size_color_id=product_size_color_id, user=self.request.user)
+        
+        context['is_available'] = obj.is_available()
 
         return context
 
