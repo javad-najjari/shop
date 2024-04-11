@@ -21,8 +21,6 @@ class AddToCartView(View):
         type_id = request.POST.get('selected_type')
         button = request.POST.get('button')
 
-        print(f'{"="*30} {len(connection.queries)}', end=' => ')
-
         product_size_color = get_object_or_404(ProductSizeColor, id=type_id)
         cart = get_user_cart(user)
         orders = cart.orders.all()
@@ -46,8 +44,6 @@ class AddToCartView(View):
             order.quantity -= 1
             order.save()
         
-        print(f'{len(connection.queries)} {"="*30}')
-
         return JsonResponse({
             
         })

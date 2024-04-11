@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.conf import settings
 
 
 
@@ -131,4 +132,28 @@ def custom_sort_key(type_id):
 
     return inner_sort_key
 
+
+
+def validate_time(created):
+    elapsed_time = timezone.now() - created
+    valid_seconds = settings.SMS_VALIDITY_SECONDS
+    return elapsed_time.seconds < valid_seconds
+
+
+
+def is_valid_phone_number(phone_number):
+
+    if not (phone_number is not None and phone_number.startswith('09') and phone_number.isdigit() and len(phone_number) == 11):
+        return False
+    
+    return True
+
+
+def permission_to_send_sms(phone_number):
+    from account.models import OTPCode
+
+    codes = OTPCode.objects.filter(phone=phone_number)
+    if not codes.exists():
+        return True
+    return not any(code.is_valid() for code in codes)
 

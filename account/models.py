@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import MinValueValidator
 from .manager import UserManager
 from product.models import ProductSizeColor
-from utils import get_title, format_price, get_types
+from utils import get_title, format_price, get_types, validate_time
 
 
 
@@ -116,4 +116,14 @@ class Payment(models.Model):
     amount = models.CharField(max_length=50)
     ref_id = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
+
+
+
+class OTPCode(models.Model):
+    phone = models.CharField(max_length=20)
+    code = models.CharField(max_length=4)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        return validate_time(self.created)
 

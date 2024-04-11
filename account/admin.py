@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import User, Order, Cart, UserAddress, Payment
+from .models import User, Order, Cart, UserAddress, Payment, OTPCode
 from utils import elapsed_time
 
 
@@ -23,9 +23,19 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 
+class OTPCodeAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'code', 'is_valid')
+
+    def is_valid(self, obj):
+        return obj.is_valid()
+    is_valid.boolean = True
+
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Cart)
 admin.site.register(UserAddress)
 admin.site.register(Payment)
+admin.site.register(OTPCode, OTPCodeAdmin)
 admin.site.unregister(Group)

@@ -1,0 +1,116 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'css/my-style.css' %}" rel="stylesheet">
+	<link href="{% static 'authentication/style.css' %}" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	
+	<form id="login-form" class="custom-login-form">
+		<div class="imgcontainer">
+			<a href="{% url 'product:home' %}">
+				<img src="{% static 'img/tpkala.png' %}" alt="" style="width: 140px; object-fit: cover; pointer-events: none; user-select: none;">
+			</a>
+		</div>
+	
+		<div class="container">
+			<label class="mb-4" for="phone_number"><b>ورود | ثبت نام</b></label>
+			<input class="mb-4" type="number" placeholder="شماره تلفن خود را وارد کنید" id="phone_number" name="phone_number" minlength="11" maxlength="11" required>
+			<button type="button" id="login-btn" disabled>ارسال کد تایید</button>
+			<div id="spinner" class="spinner-border text-primary" role="status" style="display: none;"></div>
+		</div>
+	</form>
+	
+
+	
+	<script>
+$(document).ready(function() {
+    // بررسی طول ورودی شماره تلفن در زمان بارگذاری صفحه
+    checkPhoneNumberLength();
+
+    // عملکرد غیرفعال سازی و فعال سازی دکمه ارسال کد بر اساس طول شماره تلفن
+    $('#phone_number').on('input', function() {
+        checkPhoneNumberLength();
+    });
+
+    // ارسال درخواست و فعالسازی spinner
+    $('#login-btn').click(function() {
+        if (!$(this).prop('disabled')) {
+            var phoneNumber = $('#phone_number').val();
+            var csrftoken = getCookie('csrftoken');
+
+            $('#spinner').show();
+
+            $.ajax({
+                url: '{% url "account:login" %}',
+                type: 'POST',
+                data: {
+                    phone_number: phoneNumber,
+                },
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                success: function(response) {
+
+                },
+                error: function(xhr, status, error) {
+
+                },
+                complete: function() {
+                    $('#spinner').hide();
+                }
+            });
+        }
+    });
+});
+
+// تابع بررسی طول ورودی شماره تلفن
+function checkPhoneNumberLength() {
+    var phoneNumberLength = $('#phone_number').val().length;
+    if (phoneNumberLength === 11) {
+        $('#login-btn').prop('disabled', false).removeClass('custom-btn-mute');
+    } else {
+        $('#login-btn').prop('disabled', true).addClass('custom-btn-mute');
+    }
+}
+
+
+
+	</script>
+
+
+
+	<script>
+		// تابع برای دریافت توکن CSRF از cookie
+		function getCookie(name) {
+			var cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				var cookies = document.cookie.split(';');
+				for (var i = 0; i < cookies.length; i++) {
+					var cookie = jQuery.trim(cookies[i]);
+					// دریافت توکن CSRF از cookie
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+	</script>
+	
+
+
+</body>
+</html>

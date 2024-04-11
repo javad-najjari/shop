@@ -79,23 +79,6 @@
                             });
                         });
                     
-                        // تابع برای دریافت توکن CSRF از cookie
-                        function getCookie(name) {
-                            var cookieValue = null;
-                            if (document.cookie && document.cookie !== '') {
-                                var cookies = document.cookie.split(';');
-                                for (var i = 0; i < cookies.length; i++) {
-                                    var cookie = jQuery.trim(cookies[i]);
-                                    // دریافت توکن CSRF از cookie
-                                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                        break;
-                                    }
-                                }
-                            }
-                            return cookieValue;
-                        }
-                    
                         // تابعی که وضعیت افزودن به سبد خرید را بر اساس تعداد در سبد خرید بروزرسانی می‌کند
                         function updateAddToCartButton(countInCart) {
                             if (isAvailable === 'True') {
