@@ -25,70 +25,98 @@
 		</div>
 	
 		<div class="container">
-			<label class="mb-4" for="phone_number"><b>ورود | ثبت نام</b></label>
-			<input class="mb-4" type="number" placeholder="شماره تلفن خود را وارد کنید" id="phone_number" name="phone_number" minlength="11" maxlength="11" required>
-			<button type="button" id="login-btn" disabled>ارسال کد تایید</button>
-			<div id="spinner" class="spinner-border text-primary" role="status" style="display: none;"></div>
+			<label for="phone_number"><b>ورود | ثبت نام</b></label>
+
+			<!-- phone number -->
+			<input type="text" placeholder="شماره تلفن" id="phone_number" name="phone_number" minlength="11" maxlength="11" required>
+			<p class="mb-4 text-danger display-invalid-phone invalid-phone" id="invalid-phone-text">شماره تلفن نامعتبر</p>
+	
+			<!-- otp code -->
+			<div id="verification-container" style="display:none;">
+				<input type="text" placeholder="کد تایید" id="verification_code" name="verification_code" minlength="5" maxlength="5" required pattern="\d{5}">
+				<p class="mb-4 text-danger" id="invalid-code-text" style="display: none;">کد تایید نامعتبر</p>
+			</div>
+	
+
+			<!-- phone number button -->
+			<button type="button" id="send-code-btn">ارسال کد تایید</button>
+			
+			<!-- otp code button -->
+			<button type="button" id="verify-code-btn" style="display:none;">تایید</button>
 		</div>
+	
 	</form>
+	
 	
 
 	
 	<script>
-$(document).ready(function() {
-    // بررسی طول ورودی شماره تلفن در زمان بارگذاری صفحه
-    checkPhoneNumberLength();
+		$(document).ready(function() {
 
-    // عملکرد غیرفعال سازی و فعال سازی دکمه ارسال کد بر اساس طول شماره تلفن
-    $('#phone_number').on('input', function() {
-        checkPhoneNumberLength();
-    });
+			// main function
+			function send() {
+				if (checkPhoneNumberLength()) {
+					sendVerificationCode();
+				}
+			}
 
-    // ارسال درخواست و فعالسازی spinner
-    $('#login-btn').click(function() {
-        if (!$(this).prop('disabled')) {
-            var phoneNumber = $('#phone_number').val();
-            var csrftoken = getCookie('csrftoken');
+			// تابع بررسی طول ورودی شماره تلفن
+			function checkPhoneNumberLength() {
+				var phoneNumber = $('#phone_number').val();
+				var message = $('#invalid-phone-text').text();
 
-            $('#spinner').show();
+				var phoneNumberPattern = /^09\d{9}$/;
 
-            $.ajax({
-                url: '{% url "account:login" %}',
-                type: 'POST',
-                data: {
-                    phone_number: phoneNumber,
-                },
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                success: function(response) {
+				if (!phoneNumberPattern.test(phoneNumber) || phoneNumber.length !== 11) {
+					$('#invalid-phone-text').removeClass('display-invalid-phone');
+					return false;
+				} else {
+					$('#invalid-phone-text').addClass('display-invalid-phone');
+					return true;
+				}
+			}
 
-                },
-                error: function(xhr, status, error) {
+			$('#login-btn').click(function() {
+				send();
+			});
 
-                },
-                complete: function() {
-                    $('#spinner').hide();
-                }
-            });
-        }
-    });
-});
+			$('#phone_number').on('keydown', function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					send();
+				}
+			});
 
-// تابع بررسی طول ورودی شماره تلفن
-function checkPhoneNumberLength() {
-    var phoneNumberLength = $('#phone_number').val().length;
-    if (phoneNumberLength === 11) {
-        $('#login-btn').prop('disabled', false).removeClass('custom-btn-mute');
-    } else {
-        $('#login-btn').prop('disabled', true).addClass('custom-btn-mute');
-    }
-}
+			function sendVerificationCode() {
+				var phoneNumber = $('#phone_number').val();
+				var csrftoken = getCookie('csrftoken');
 
+				$('#spinner').show();
+
+				$.ajax({
+					url: '{% url "account:login" %}',
+					type: 'POST',
+					data: {
+						phone_number: phoneNumber,
+					},
+					headers: {
+						'X-CSRFToken': csrftoken
+					},
+					success: function(response) {
+
+					},
+					error: function(xhr, status, error) {
+
+					},
+					complete: function() {
+						$('#spinner').hide();
+					}
+				});
+			}
+		});
 
 
 	</script>
-
 
 
 	<script>

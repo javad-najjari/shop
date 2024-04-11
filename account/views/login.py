@@ -11,7 +11,7 @@ from ..models import OTPCode
 
 
 
-class SendVerificationCodeView(View):
+class UserLoginView(View):
     template_name = 'account/login.html'
 
     def get(self, request):
@@ -19,18 +19,15 @@ class SendVerificationCodeView(View):
 
     def post(self, request):
         import time
-        time.sleep(2)
+        time.sleep(1)
 
         phone_number = request.POST.get('phone_number', None)
 
         if not is_valid_phone_number(phone_number):
-            print('=' * 50)
-            print('phone number is not valid')
-            print('=' * 50)
             return JsonResponse({'result': False})
         
         if not permission_to_send_sms(phone_number):
-            return JsonResponse({})
+            return JsonResponse({'result': True})
 
         code = random.randint(10000, 99999)
         OTPCode.objects.create(phone=phone_number, code=code)
@@ -39,21 +36,21 @@ class SendVerificationCodeView(View):
 
 
 
-class UserLoginView(View):
+# class UserLoginView(View):
 
-    def get(self, request):
-        form = self.form_class()
-        return render(request, 'accounts/login.html', {'form': form})
+#     def get(self, request):
+#         form = self.form_class()
+#         return render(request, 'accounts/login.html', {'form': form})
     
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(request, username=cd['username'], password=cd['password'])
-            if user != None:
-                login(request, user)
-                return redirect('store:home')
+#     def post(self, request):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(request, username=cd['username'], password=cd['password'])
+#             if user != None:
+#                 login(request, user)
+#                 return redirect('store:home')
                 
-            return redirect('accounts:login')
+#             return redirect('accounts:login')
         
 

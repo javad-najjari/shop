@@ -14,7 +14,7 @@ urlpatterns = [
     path('contact-us/', views.ContactUsView.as_view(), name='contact-us'),
 
     # authentication
-    path('account/login/', views.SendVerificationCodeView.as_view(), name='login'),
+    path('account/login/', views.UserLoginView.as_view(), name='login'),
 
     # profile
     path('account/profile/', views.ProfileView.as_view(), name='profile'),

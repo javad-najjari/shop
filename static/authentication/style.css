@@ -5,7 +5,7 @@ form {
     border: 3px solid #f1f1f1;
 }
 
-input[type=number], input[type=password] {
+input[type=text], input[type=password] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -13,6 +13,21 @@ input[type=number], input[type=password] {
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
+
+.custom-center {
+    text-align: center;
+}
+
+input[type=number] {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px auto;
+    display: block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+
 
 button {
     background-color: #FFD333;
@@ -73,13 +88,6 @@ html, body {
   
 
 
-@media screen and (min-width: 575px) {
-    .custom-login-form {
-        max-width: 500px;
-    }
-}
-
-
 @media screen and (max-width: 994px) {
     .custom-login-form {
         margin-bottom: 120px;
@@ -88,7 +96,16 @@ html, body {
 
 
 
-
 .custom-btn-mute {
     color: #999999;
+}
+
+
+.display-invalid-phone {
+    display: none;
+}
+
+
+.invalid-phone {
+    font-size: 13px;
 }
