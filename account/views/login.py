@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views import View
 from django.contrib.auth import login
 from ..models import User, OTPCode
-from utils import is_valid_phone_number, permission_to_send_sms, english_numbers_converter
+from utils import is_valid_phone_number, permission_to_send_sms, english_numbers_converter, get_next_url
 
 
 
@@ -14,6 +14,8 @@ class UserLoginView(View):
     template_name = 'account/login.html'
 
     def get(self, request):
+        next = request.GET.get('next', reverse('product:home'))
+        request.session['next_url'] = next
         return render(request, self.template_name)
 
     def post(self, request):
@@ -51,7 +53,7 @@ class UserLoginView(View):
                 except KeyError:
                     pass
                 
-                return JsonResponse({'result': True, 'redirect_url': reverse('account:profile')})
+                return JsonResponse({'result': True, 'redirect_url': get_next_url(request)})
 
         return JsonResponse({'result': False})
 

@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.conf import settings
+from django.urls import reverse
 
 
 
@@ -175,4 +176,11 @@ def permission_to_send_sms(phone_number):
     if not codes.exists():
         return True
     return not any(code.is_valid() for code in codes)
+
+
+def get_next_url(request):
+    if 'next_url' in request.session:
+        return request.session['next_url']
+    else:
+        return reverse('product:home')
 
