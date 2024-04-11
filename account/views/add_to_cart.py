@@ -6,17 +6,12 @@ from utils import get_user_cart, more_than_stock
 from ..models import Order, ProductSizeColor
 
 
-from django.db import connection
 
 
-
-
-class AddToCartView(View):
+class AddToCartView(LoginRequiredMixin, View):
 
     def post(self, request):
-        # TODO: 2 lines below must change
-        from ..models import User
-        user = User.objects.first()
+        user = request.user
 
         type_id = request.POST.get('selected_type')
         button = request.POST.get('button')

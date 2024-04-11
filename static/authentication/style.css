@@ -85,10 +85,9 @@ html, body {
     background-color: white;
     border-radius: 5px;
 }
-  
 
 
-@media screen and (max-width: 994px) {
+@media screen and (max-width: 992px) {
     .custom-login-form {
         margin-bottom: 120px;
     }
@@ -108,4 +107,12 @@ html, body {
 
 .invalid-phone {
     font-size: 13px;
+}
+
+
+
+/* بوردر اطراف اینپوت های تلفن و کد تایید */
+input[type="text"]:focus {
+    border: 2px solid none;
+    outline: none;
 }

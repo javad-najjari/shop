@@ -23,6 +23,28 @@ def persian_numbers_converter(mystr):
     return mystr
 
 
+def english_numbers_converter(mystr):
+    if not mystr:
+        return None
+
+    pnumbers = {
+        '۰': '0',
+        '۱': '1',
+        '۲': '2',
+        '۳': '3',
+        '۴': '4',
+        '۵': '5',
+        '۶': '6',
+        '۷': '7',
+        '۸': '8',
+        '۹': '9',
+    }
+
+    for p, e in pnumbers.items():
+        mystr = mystr.replace(p, e)
+    return mystr
+
+
 def elapsed_time(created):
     time = (timezone.now() - created).total_seconds()
 
@@ -103,20 +125,19 @@ def get_types(obj):
 
 
 def get_user_cart(user):
-    # return user.carts.filter(paid=False).last()
-
-    from account.models import Cart
-    return Cart.objects.filter(paid=False).last()
+    return user.carts.filter(paid=False).last() if user.is_authenticated else None
 
 
 def get_quantity_in_cart(product_size_color_id, user):
-    orders = get_user_cart(user).orders.all()
+    cart = get_user_cart(user)
+    orders = cart.orders.all() if cart else None
 
-    order = orders.filter(product_size_color__id=product_size_color_id)
-    if order.exists():
-        return order.first().quantity
-    else:
-        return 0
+    if orders:
+        order = orders.filter(product_size_color__id=product_size_color_id)
+        if order.exists():
+            return order.first().quantity
+    
+    return 0
 
 
 def more_than_stock(product_size_color, count):
@@ -133,12 +154,10 @@ def custom_sort_key(type_id):
     return inner_sort_key
 
 
-
 def validate_time(created):
     elapsed_time = timezone.now() - created
     valid_seconds = settings.SMS_VALIDITY_SECONDS
     return elapsed_time.seconds < valid_seconds
-
 
 
 def is_valid_phone_number(phone_number):
