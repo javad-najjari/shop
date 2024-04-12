@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+    <!-- Cart Start -->
+
+    <h2 class="mb-5" style="text-align: center;">تاریخچه سفارشات</h2>
+
+    <div class="col-lg-9 col-md-8">
+        <div class="row pb-3">
+            
+            {% for cart in paid_carts %}
+                <div class="col-lg-4 col-md-4 col-sm-6 pb-1 mb-responsive">
+                    <div class="bg-light">
+                        <a class="mb-3 pt-4 pr-4">
+                            <h6 class="mb-3">
+                                {% if cart.status == 'delivered' %}
+                                    <i class="fas fa-check-circle text-success product-status mr-4"></i>&nbsp;
+                                    تحویل شده
+                                {% elif cart.status == 'sending' %}
+                                    <i class="fas fa-truck text-warning product-status mr-4"></i>&nbsp;
+                                    در حال ارسال
+                                {% elif cart.status == 'returned' %}
+                                    <i class="fas fa-undo-alt text-danger product-status mr-4"></i>&nbsp;
+                                    مرجوعی
+                                {% endif %}
+                            </h6>
+                        </a>
+                        
+                        <p class="mr-3" style="font-size: 12px;">کد سفارش : &nbsp; &nbsp;<b style="font-size: 17px;">{{ cart.persian_order_code }}</b></p>
+                        <div>
+                            <p class="mr-3" style="font-size: 12px; display: inline-block;">{{ cart.jalali_payed_time }}</p>
+                            <b style="font-size: 12px; float: left; margin-left: 10px;">{{ cart.amount_paid_fa }} <small>تومان</small></b>
+                        </div>
+                        
+                        <div class="d-flex flex-wrap justify-content-start mt-3">
+                            {% for image in cart.order_images %}
+                                <div class="image-wrapper mr-2">
+                                    <img src="{{ image }}" class="img-fluid mb-1" style="width: 40px;">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center mt-5" style="width: 150%;">
+                    <h2 class="mb-4 pr-3 pl-3">تاکنون سفارشی ثبت نکرده اید</h2>
+                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="{% url 'product:list' %}" style="background-color: #FFD333; color: black;">
+                        بریم واسه خرید
+                    </a>
+                </div>
+            {% endfor %}
+            
+
+        </div>
+    </div>
+
+{% endblock content %}

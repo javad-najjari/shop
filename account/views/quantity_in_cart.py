@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.http import JsonResponse
-from utils import get_user_cart, get_quantity_in_cart, more_than_stock
+from utils import get_quantity_in_cart, more_than_stock
 from ..models import ProductSizeColor
 
 

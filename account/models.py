@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import MinValueValidator
 from .manager import UserManager
 from product.models import ProductSizeColor
-from utils import get_title, format_price, get_types, validate_time
+from utils import get_title, format_price, get_types, validate_time, persian_date, persian_numbers_converter
 
 
 
@@ -51,12 +51,10 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     product_size_color = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return get_title(self.product_size_color.product.title, length=50)
-
-    class Meta:
-        unique_together = ['product_size_color', 'quantity']
     
     def total_price(self):
         return self.product_size_color.product.price_after_discount() * self.quantity
@@ -75,6 +73,7 @@ class Order(models.Model):
 class Cart(models.Model):
     STATUSES = (
         ('unpaid', 'unpaid'),
+        ('sending', 'sending'),
         ('delivered', 'delivered'),
         ('returned', 'returned'),
     )
@@ -103,10 +102,22 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def total_price(self):
-        return sum(order.total_price() for order in self.orders.all())
+        return sum(order.total_price() for order in self.orders.filter(paid=False))
     
     def total_price_fa(self):
         return format_price(self.total_price(), lang='fa')
+    
+    def amount_paid_fa(self):
+        return format_price(self.amount_paid, lang='fa')
+    
+    def jalali_payed_time(self):
+        return persian_date(self.pay_time) if self.pay_time else None
+    
+    def persian_order_code(self):
+        return persian_numbers_converter(str(self.order_code))
+    
+    def order_images(self):
+        return [order.product_size_color.product.cover.url for order in self.orders.filter(paid=True)]
 
 
 

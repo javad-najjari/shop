@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from utils import get_user_cart, more_than_stock
+from utils import get_user_cart, more_than_stock, get_user_orders
 from ..models import Order, ProductSizeColor
 
 
@@ -18,9 +18,9 @@ class AddToCartView(LoginRequiredMixin, View):
 
         product_size_color = get_object_or_404(ProductSizeColor, id=type_id)
         cart = get_user_cart(user)
-        orders = cart.orders.all()
+        orders = get_user_orders(user=user)
 
-        order = orders.filter(product_size_color=product_size_color, user=user).last()
+        order = orders.filter(product_size_color=product_size_color, user=user, paid=False).last()
         if not order:
             order = Order.objects.create(user=user, product_size_color=product_size_color, quantity=0)
             cart.orders.add(order)

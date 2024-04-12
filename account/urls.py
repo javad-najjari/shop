@@ -17,7 +17,7 @@ urlpatterns = [
     path('account/login/', views.UserLoginView.as_view(), name='login'),
 
     # profile
-    path('account/profile/', views.ProfileView.as_view(), name='profile'),
+    path('profile/orders', views.OrderHistoryView.as_view(), name='orders'),
 
     path('payment/', views.PaymentPageView.as_view(), name='payment'),
     path('payment-verify/', views.PaymentVerifyView.as_view(), name='payment-verify'),

@@ -19,7 +19,15 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product_size_color', 'quantity')
+    list_display = ('user', 'product_size_color', 'quantity', 'paid')
+
+
+
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('order_code', 'user', 'orders_count', 'paid', 'status')
+
+    def orders_count(self, obj):
+        return sum(order.quantity for order in obj.orders.all())
 
 
 
@@ -34,7 +42,7 @@ class OTPCodeAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Cart)
+admin.site.register(Cart, CartAdmin)
 admin.site.register(UserAddress)
 admin.site.register(Payment)
 admin.site.register(OTPCode, OTPCodeAdmin)

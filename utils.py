@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
+from jalali_date import datetime2jalali
 
 
 
@@ -126,12 +127,20 @@ def get_types(obj):
 
 
 def get_user_cart(user):
-    return user.carts.filter(paid=False).last() if user.is_authenticated else None
+    from account.models import Cart
+
+    if user.is_authenticated:
+        return Cart.objects.get_or_create(user=user, paid=False)[0]
+    
+    return None
+
+
+def get_user_orders(user, paid=False):
+    return user.orders.filter(paid=paid)
 
 
 def get_quantity_in_cart(product_size_color_id, user):
-    cart = get_user_cart(user)
-    orders = cart.orders.all() if cart else None
+    orders = get_user_orders(user)
 
     if orders:
         order = orders.filter(product_size_color__id=product_size_color_id)
@@ -183,4 +192,32 @@ def get_next_url(request):
         return request.session['next_url']
     else:
         return reverse('product:home')
+
+
+def gregorian_to_jalali(date):
+    jalali_date = datetime2jalali(date)
+    return f'{jalali_date.year}/{jalali_date.month}/{jalali_date.day}'
+
+
+def persian_date(date):
+    j_date = gregorian_to_jalali(date)
+    year, month, day = j_date.split('/')
+    year, day = persian_numbers_converter(year), persian_numbers_converter(day)
+    
+    j_months = {
+        '1': 'فروردین',
+        '2': 'اردیبهشت',
+        '3': 'خرداد',
+        '4': 'تیر',
+        '5': 'مرداد',
+        '6': 'شهریور',
+        '7': 'مهر',
+        '8': 'آبان',
+        '9': 'آذر',
+        '10': 'دی',
+        '11': 'بهمن',
+        '12': 'اسفند',
+    }
+    
+    return f'{day} {j_months[month]} {year}'
 
