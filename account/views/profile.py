@@ -1,18 +1,20 @@
-from django.views import generic
-from utils import get_user_orders
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
 
-class OrderHistoryView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'account/orders_history.html'
+class ProfileView(LoginRequiredMixin, View):
+    template_name = 'account/profile.html'
 
-    def get_context_data(self, **kwargs):
-        user = self.request.user
-        context = super().get_context_data(**kwargs)
+    def get(self, request):
+        return render(request, self.template_name)
 
-        context['paid_carts'] = user.carts.filter(paid=True).order_by('-pay_time')
-
-        return context
+    def post(self, request):
+        name = request.POST.get('name')
+        request.user.name = name
+        request.user.save()
+        return JsonResponse({})
 

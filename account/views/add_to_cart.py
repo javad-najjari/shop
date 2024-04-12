@@ -1,17 +1,19 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
 from utils import get_user_cart, more_than_stock, get_user_orders
 from ..models import Order, ProductSizeColor
 
 
 
 
-class AddToCartView(LoginRequiredMixin, View):
+class AddToCartView(View):
 
     def post(self, request):
         user = request.user
+
+        if not user.is_authenticated:
+            return JsonResponse({'status': 401})
 
         type_id = request.POST.get('selected_type')
         button = request.POST.get('button')

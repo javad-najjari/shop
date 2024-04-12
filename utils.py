@@ -136,7 +136,7 @@ def get_user_cart(user):
 
 
 def get_user_orders(user, paid=False):
-    return user.orders.filter(paid=paid)
+    return user.orders.filter(paid=paid) if user.is_authenticated else None
 
 
 def get_quantity_in_cart(product_size_color_id, user):

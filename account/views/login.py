@@ -1,6 +1,6 @@
 import random
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth import login
@@ -14,11 +14,17 @@ class UserLoginView(View):
     template_name = 'account/login.html'
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect(get_next_url(request))
+
         next = request.GET.get('next', reverse('product:home'))
         request.session['next_url'] = next
         return render(request, self.template_name)
 
     def post(self, request):
+
+        if request.user.is_authenticated:
+            return JsonResponse({})
 
         phone_number = english_numbers_converter(request.POST.get('phone_number', None))
         code = english_numbers_converter(request.POST.get('code', None))

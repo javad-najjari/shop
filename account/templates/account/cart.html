@@ -13,7 +13,7 @@
         <div class="row pb-3">
             
             {% for order in orders %}
-                <div class="col-lg-4 col-md-4 col-sm-6 pb-1 mb-responsive">
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 mb-responsive">
                     <div class="bg-light">
                         <a href="{% url 'product:detail' order.product_size_color.product.title %}?type_id={{ order.product_size_color.id }}" class="div-d-flex product-item">
                             <div class="product-img position-relative overflow-hidden mr-2">

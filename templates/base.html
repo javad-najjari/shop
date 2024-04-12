@@ -99,6 +99,7 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between pc-only" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
+                            <a href="{% url 'account:profile' %}" class="nav-item nav-link">حساب کاربری</a>
                             <a href="{% url 'product:list' %}" class="nav-item nav-link">محصولات</a>
                             <a href="{% url 'account:cart' %}" class="nav-item nav-link pc-only">سبد خرید</a>
                             <a href="{% url 'account:contact-us' %}" class="nav-item nav-link">تماس با ما</a>
@@ -176,7 +177,7 @@
             <i id="category-icon" class="fa fa-list-alt {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
             <span style="color: white;">دسته بندی</span>
         </a>
-        <a href="{% url 'account:orders' %}" class="menu-item">
+        <a href="{% url 'account:profile' %}" class="menu-item">
             <i class="fa fa-user {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
             <span style="color: white;">حساب من</span>
         </a>

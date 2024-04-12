@@ -116,6 +116,12 @@
                                 
                                 success: function(response) {
                                     $('#spinner').hide();
+                                    
+                                    if (response.status === 401) {
+                                        var loginUrl = "{% url 'account:login' %}?next=" + window.location.pathname;
+                                        window.location.href = loginUrl;
+                                    }
+
                                     updateAddToCartButton(response.count_in_cart);
                                     if (response.limited_stock) {
                                         $('#quantity-in-cart-btn .disable-plus').prop('disabled', true);
@@ -160,6 +166,10 @@
                                 },
                                 success: function(response) {
                                     $('#spinner').hide();
+                                    if (response.status === 401) {
+                                        var loginUrl = "{% url 'account:login' %}?next=" + window.location.pathname;
+                                        window.location.href = loginUrl;
+                                    }
                                     checkQuantityInCart(selectedType);
                                 },
                                 error: function(xhr, errmsg, err) {
