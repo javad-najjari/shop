@@ -178,7 +178,7 @@
             <span style="color: white;">دسته بندی</span>
         </a>
         <a href="{% url 'account:profile' %}" class="menu-item">
-            <i class="fa fa-user {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+            <i class="fa fa-user {% if request.path == '/profile/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
             <span style="color: white;">حساب من</span>
         </a>
     </div>
@@ -271,9 +271,9 @@
                     <div class="col-md-6 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">حساب من</h5>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-left mr-2"></i> ورود</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-left mr-2"></i> اطلاعات کاربری</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-left mr-2"></i> لیست خریدها</a>
+                            <a class="text-secondary mb-2" href="{% url 'account:login' %}"><i class="fa fa-angle-left mr-2"></i> ورود</a>
+                            <a class="text-secondary mb-2" href="{% url 'account:profile' %}"><i class="fa fa-angle-left mr-2"></i> اطلاعات کاربری</a>
+                            <a class="text-secondary mb-2" href="{% url 'account:orders' %}"><i class="fa fa-angle-left mr-2"></i> لیست خریدها</a>
                             <a class="text-secondary mb-5" href="#"><i class="fa fa-angle-left mr-2"></i> پیغام ها</a>
                         </div>
                     </div>

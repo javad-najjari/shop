@@ -32,34 +32,47 @@
 
 
     <script>
+
         $(document).ready(function() {
-
             $('#update-name-btn').click(function() {
-                var newName = $('#name').val();
-                var csrftoken = getCookie('csrftoken');
+                updateName();
+            });
 
-                $('#spinner').show();
-    
-                $.ajax({
-                    url: '{% url "account:profile" %}',
-                    type: 'POST',
-                    data: {'name': newName,},
-                    headers: { 'X-CSRFToken': csrftoken },
-                    success: function(response) {
-                        $('#success-message').fadeIn();
-                        setTimeout(function() {
-                            $('#success-message').fadeOut();
-                        }, 4000);
-                    },
-                    error: function(xhr, errmsg, err) {
-                        
-                    },
-					complete: function() {
-						$('#spinner').hide();
-					}
-                });
+            $('#name').on('keydown', function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    updateName();
+                }
             });
         });
+
+
+        function updateName() {
+            var newName = $('#name').val();
+            var csrftoken = getCookie('csrftoken');
+
+            $('#spinner').show();
+
+            $.ajax({
+                url: '{% url "account:profile" %}',
+                type: 'POST',
+                data: {'name': newName,},
+                headers: { 'X-CSRFToken': csrftoken },
+                success: function(response) {
+                    $('#success-message').fadeIn();
+                    setTimeout(function() {
+                        $('#success-message').fadeOut();
+                    }, 4000);
+                },
+                error: function(xhr, errmsg, err) {
+                    
+                },
+                complete: function() {
+                    $('#spinner').hide();
+                }
+            });
+}
+
 
 
 		// تابع برای دریافت توکن CSRF از cookie
