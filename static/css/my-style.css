@@ -703,3 +703,39 @@ span.custom-circle {
   display: none;
   cursor: pointer;
 }
+
+
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.custom-btn {
+  background-color: #FFD333;
+  color: black;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.product-image {
+  padding: 1rem;
+  aspect-ratio: 1.5;
+  object-fit: contain;
+}
+
+
+
+.checkout-btn {
+  color: black;
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}

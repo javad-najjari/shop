@@ -164,24 +164,26 @@
 
     <!-- Mobile menu -->
 
-    <div class="mobile-menu mobile-only">
-        <a href="{% url 'product:home' %}" class="menu-item">
-            <i class="fa fa-home {% if request.path == '/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            <span style="color: white;">خانه</span>
-        </a>
-        <a href="{% url 'account:cart' %}" class="menu-item">
-            <i class="fa fa-shopping-basket {% if request.path == '/account/cart/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            <span style="color: white;">سبد خرید</span>
-        </a>
-        <a id="category-btn" class="menu-item mobile-only" data-toggle="modal" data-target="#myModal" onclick="changeCategoryIcon()">
-            <i id="category-icon" class="fa fa-list-alt {% if request.path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            <span style="color: white;">دسته بندی</span>
-        </a>
-        <a href="{% url 'account:profile' %}" class="menu-item">
-            <i class="fa fa-user {% if request.path == '/profile/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
-            <span style="color: white;">حساب من</span>
-        </a>
-    </div>
+    {% with request.path as path %}
+        <div class="mobile-menu mobile-only">
+            <a href="{% url 'product:home' %}" class="menu-item">
+                <i class="fa fa-home {% if path == '/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+                <span style="color: white;">خانه</span>
+            </a>
+            <a href="{% url 'account:cart' %}" class="menu-item">
+                <i class="fa fa-shopping-basket {% if path == '/account/cart/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+                <span style="color: white;">سبد خرید</span>
+            </a>
+            <a id="category-btn" class="menu-item mobile-only" data-toggle="modal" data-target="#myModal" onclick="changeCategoryIcon()">
+                <i id="category-icon" class="fa fa-list-alt {% if path == '' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+                <span style="color: white;">دسته بندی</span>
+            </a>
+            <a href="{% url 'account:profile' %}" class="menu-item">
+                <i class="fa fa-user {% if path == '/profile/' %} menu-item-active {% else %} menu-item-unactive {% endif %}"></i>
+                <span style="color: white;">حساب من</span>
+            </a>
+        </div>
+    {% endwith %}
 
 
     <script>
