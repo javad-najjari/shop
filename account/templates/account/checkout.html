@@ -7,45 +7,55 @@
 <!-- Checkout Start -->
 <div class="container-fluid">
     <div class="row px-xl-5">
-        <div class="col-lg-8">
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">آدرس تحویل کالا</span></h5>
-            <div class="bg-light p-30 mb-5">
-                <div class="row">
-                    <div class="col-md-4 form-group">
-                        <label>نام دریافت کننده</label>
-                        <input class="form-control" type="text" placeholder="">
+
+        <form id="checkout-form" method="POST">
+            {% csrf_token %}
+            
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">آدرس تحویل کالا</span></h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>نام دریافت کننده <span style="color: red;">*</span></label>
+                            <input class="form-control" name="recipient_name" type="text" value="{{ information.recipient_name }}" required>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>شماره تلفن <span style="color: red;">*</span></label>
+                            <input class="form-control" name="phone" type="number" value="{{ information.phone_number }}" required>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>شهرستان <span style="color: red;">*</span></label>
+                            <select class="custom-select" name="city" required>
+                                <option selected>گرمه</option>
+                                <option>جاجرم</option>
+                                <option>ایور</option>
+                                <option>درق</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>آدرس و پلاک <span style="color: red;">*</span></label>
+                            <input class="form-control" name="address" type="text" value="{{ information.address }}" required>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>کد پستی</label>
+                            <input class="form-control" name="postal_code" type="number" value="{{ information.postal_code }}">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>توضیحات سفارش</label>
+                            <textarea class="form-control" name="description" id="" cols="30" rows="6"></textarea>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            
+                        </div>
                     </div>
-                    <div class="col-md-4 form-group">
-                        <label>شماره تلفن</label>
-                        <input class="form-control" type="number" placeholder="09123456789">
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label>شهرستان</label>
-                        <select class="custom-select">
-                            <option selected>گرمه</option>
-                            <option>جاجرم</option>
-                            <option>ایور</option>
-                            <option>درق</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>آدرس و پلاک</label>
-                        <input class="form-control" type="text" placeholder="خیابان ...">
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label>کد پستی</label>
-                        <input class="form-control" type="number">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>توضیحات سفارش</label>
-                        <textarea class="form-control" name="" id="" cols="30" rows="6" placeholder=""></textarea>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        
-                    </div>
+                    <button class="btn btn-block btn-primary font-weight-bold py-3">تایید و انتقال به درگاه پرداخت</button>
                 </div>
             </div>
-        </div>
+
+        </form>
+
+
+
         <div class="col-lg-4">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">نمای کلی</span></h5>
             <div class="bg-light p-30 mb-5">
@@ -65,10 +75,9 @@
                     </div>
                 </div>
             </div>
-            <a href="{% url 'account:payment' %}">
-                <button class="btn btn-block btn-primary font-weight-bold py-3">تایید و انتقال به درگاه پرداخت</button>
-            </a>
         </div>
+
+
     </div>
 </div>
 <!-- Checkout End -->

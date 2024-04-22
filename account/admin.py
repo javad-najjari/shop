@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import User, Order, Cart, UserAddress, Payment, OTPCode
+from .models import User, Order, Cart, Payment, OTPCode
 from utils import elapsed_time
 
 
@@ -43,7 +43,6 @@ class OTPCodeAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Cart, CartAdmin)
-admin.site.register(UserAddress)
 admin.site.register(Payment)
 admin.site.register(OTPCode, OTPCodeAdmin)
 admin.site.unregister(Group)

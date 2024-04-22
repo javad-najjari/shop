@@ -31,22 +31,6 @@ class User(AbstractBaseUser):
 
 
 
-class UserAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_addresses')
-    address = models.TextField()
-    postal_code = models.CharField(max_length=20, null=True, blank=True)
-    recipient_name = models.CharField(max_length=100, null=True, blank=True)
-    phone_number = models.CharField(max_length=20, null=True)
-    
-    class Meta:
-        ordering = ('-id',)
-        verbose_name_plural = 'user addresses'
-    
-    def __str__(self):
-        return self.address
-
-
-
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     product_size_color = models.ForeignKey(ProductSizeColor, on_delete=models.CASCADE)
@@ -84,7 +68,6 @@ class Cart(models.Model):
     order_description = models.TextField(null=True, blank=True)
 
     # Address
-    address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     address_text = models.TextField(blank=True)
     postal_code = models.CharField(max_length=20, null=True, blank=True)
     recipient_name = models.CharField(max_length=100, null=True, blank=True)

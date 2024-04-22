@@ -704,6 +704,19 @@ span.custom-circle {
   cursor: pointer;
 }
 
+.error-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f11515;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+  cursor: pointer;
+}
+
 
 
 .flex-container {

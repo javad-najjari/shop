@@ -22,47 +22,45 @@ ZP_API_STARTPAY = f"https://www.zarinpal.com/pg/StartPay/"
 class PaymentPageView(LoginRequiredMixin, View):
 
     def get(self, request):
-        messages.success(request, 'پرداخت موفق - سفارش شما به زودی ارسال میشود')
-        return redirect('account:cart')
         
-        # cart = get_object_or_404(Cart, user=request.user, paid=False)
+        cart = get_object_or_404(Cart, user=request.user, paid=False)
 
-        # if cart.orders.count() == 0:
-        #     return Response({'detail': no_order(request)}, status=404)
+        if cart.orders.count() == 0:
+            return Response({'detail': no_order(request)}, status=404)
         
-        # for order in cart.orders.all().select_related('product_color'):
-        #     if order.product_color.stock < order.count:
-        #         return Response({'detail': more_than_stock_2(order.product_color.product, lang)}, status=400)
+        for order in cart.orders.all().select_related('product_color'):
+            if order.product_color.stock < order.count:
+                return Response({'detail': more_than_stock_2(order.product_color.product, lang)}, status=400)
 
-        # amount = cart_final_price(cart, lang='fa')
-        # data = {
-        #     "MerchantID": config('MERCHANT'),
-        #     "Amount": amount,
-        #     "Description": f'پرداخت محصولات به مبلغ کل {amount} تومان',
-        #     "Phone": cart.user.phone_number,
-        #     "CallbackURL": f'{config("CALLBACKURL", None)}?order_code={cart.order_code}&user={request.user.id}',
-        # }
+        amount = cart_final_price(cart, lang='fa')
+        data = {
+            "MerchantID": config('MERCHANT'),
+            "Amount": amount,
+            "Description": f'پرداخت محصولات به مبلغ کل {amount} تومان',
+            "Phone": cart.user.phone_number,
+            "CallbackURL": f'{config("CALLBACKURL", None)}?order_code={cart.order_code}&user={request.user.id}',
+        }
         
-        # data = json.dumps(data)
-        # headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+        data = json.dumps(data)
+        headers = {'content-type': 'application/json', 'content-length': str(len(data))}
         
-        # try:
-        #     response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+        try:
+            response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
 
-        #     if response.status_code == 200:
-        #         response = response.json()
-        #         if response['Status'] == 100:
-        #             return Response({
-        #                 'status': True, 'url': ZP_API_STARTPAY + str(response['Authority']), 'authority': response['Authority']
-        #             })
-        #         else:
-        #             return Response({'status': False, 'code': str(response['Status'])})
-        #     return Response(response)
+            if response.status_code == 200:
+                response = response.json()
+                if response['Status'] == 100:
+                    return Response({
+                        'status': True, 'url': ZP_API_STARTPAY + str(response['Authority']), 'authority': response['Authority']
+                    })
+                else:
+                    return Response({'status': False, 'code': str(response['Status'])})
+            return Response(response)
         
-        # except requests.exceptions.Timeout:
-        #     return Response({'status': False, 'code': 'timeout'})
-        # except requests.exceptions.ConnectionError:
-        #     return Response({'status': False, 'code': 'connection error'})
+        except requests.exceptions.Timeout:
+            return Response({'status': False, 'code': 'timeout'})
+        except requests.exceptions.ConnectionError:
+            return Response({'status': False, 'code': 'connection error'})
 
 
 

@@ -151,6 +151,22 @@
         </script>        
     {% endif %} -->
 
+
+    {% if messages %}
+        {% for message in messages %}
+            <div id="message-to-show" class="{% if message.tags == success %} success-message {% else %} error-message {% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <script>
+        $('#message-to-show').fadeIn();
+        setTimeout(function() {
+            $('#message-to-show').fadeOut();
+        }, 4000);
+    </script>
+
     
     {% block content %}
 
