@@ -26,7 +26,6 @@ class PaymentPageView(LoginRequiredMixin, View):
     def get(self, request):
         
         cart = get_object_or_404(Cart, user=request.user, paid=False)
-        clean_cart(cart)
 
         if cart.orders.count() == 0:
             messages.error(request, 'سبد خرید شما خالیست')
@@ -74,6 +73,7 @@ class PaymentVerifyView(View):
         request.user = user
         authority = request.GET.get('Authority')
         cart = get_object_or_404(Cart, user=request.user, paid=False)
+        clean_cart(cart)
         amount = cart.total_price()
 
         data = {

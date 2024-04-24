@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from utils import get_user_cart, clean_cart
+from utils import get_user_cart
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -14,6 +14,5 @@ class CartView(LoginRequiredMixin, TemplateView):
         orders = cart.orders.all()
         context['cart'] = cart
         context['orders'] = orders.filter(quantity__gt=0).order_by('product_size_color__product__title')
-        clean_cart(cart)
         return context
 

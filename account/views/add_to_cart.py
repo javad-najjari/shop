@@ -20,7 +20,7 @@ class AddToCartView(View):
 
         product_size_color = get_object_or_404(ProductSizeColor, id=type_id)
         cart = get_user_cart(user)
-        orders = cart.orders.all()
+        orders = user.orders.all()
 
         order = orders.filter(product_size_color=product_size_color, user=user, paid=False).last()
         if not order:

@@ -244,6 +244,7 @@ def get_user_address_information(user, current_cart, previous_cart):
 
 
 def clean_cart(cart):
+    # TODO: اردرهایی که توی سبد خرید نیستن کلا باید پاک بشن
     orders = cart.orders.filter(quantity=0)
 
     if orders.exists():
@@ -263,7 +264,7 @@ def out_of_stock(cart, request):
 
 
 def after_payment(cart, amount, request):
-    orders = cart.orders.all().select_related('product_color__product')
+    orders = cart.orders.filter(quantity__gt=0).select_related('product_color__product')
     # for order in orders:
     #     order.product_color.stock -= order.count
     #     order.product_color.product.sales += order.count
