@@ -2,7 +2,6 @@ import json
 import requests
 from decouple import config
 from django.views import View
-from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect
@@ -52,17 +51,16 @@ class PaymentPageView(LoginRequiredMixin, View):
             if response.status_code == 200:
                 response = response.json()
                 if response['Status'] == 100:
-                    return JsonResponse({
-                        'status': True, 'url': ZP_API_STARTPAY + str(response['Authority']), 'authority': response['Authority']
-                    })
-                else:
-                    return JsonResponse({'status': False, 'code': str(response['Status'])})
-            return JsonResponse(response)
+                    return redirect(ZP_API_STARTPAY + str(response['Authority']))
+            messages.error(request, 'خطایی رخ داده است')
+            return redirect('account:cart')
         
         except requests.exceptions.Timeout:
-            return JsonResponse({'status': False, 'code': 'timeout'})
+            messages.error(request, 'خطای تاخیر زمانی')
+            return redirect('account:cart')
         except requests.exceptions.ConnectionError:
-            return JsonResponse({'status': False, 'code': 'connection error'})
+            messages.error(request, 'خطای برقراری ارتباط')
+            return redirect('account:cart')
 
 
 
