@@ -154,18 +154,25 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div id="message-to-show" class="{% if message.tags == success %} success-message {% else %} error-message {% endif %}">
+            <div class="message-to-show {% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
                 {{ message }}
             </div>
         {% endfor %}
     {% endif %}
 
+
     <script>
-        $('#message-to-show').fadeIn();
-        setTimeout(function() {
-            $('#message-to-show').fadeOut();
-        }, 4000);
+        $(document).ready(function() {
+            $('.message-to-show').fadeIn().click(function() {
+                $(this).fadeOut(); // Fade out the message when it is clicked
+            });
+    
+            setTimeout(function() {
+                $('.message-to-show').fadeOut(); // Automatically fade out after 6 seconds
+            }, 6000);
+        });
     </script>
+    
 
     
     {% block content %}

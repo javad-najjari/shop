@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
+from django.contrib import messages
 from jalali_date import datetime2jalali
 
 
@@ -135,12 +136,8 @@ def get_user_cart(user):
     return None
 
 
-def get_user_orders(user, paid=False):
-    return user.orders.filter(paid=paid) if user.is_authenticated else None
-
-
 def get_quantity_in_cart(product_size_color_id, user):
-    orders = get_user_orders(user)
+    orders = get_user_cart(user).orders.all()
 
     if orders:
         order = orders.filter(product_size_color__id=product_size_color_id)
@@ -244,4 +241,52 @@ def get_user_address_information(user, current_cart, previous_cart):
                 'recipient_name': user.name,
                 'phone_number': user.phone_number,
             }
+
+
+def clean_cart(cart):
+    orders = cart.orders.filter(quantity=0)
+
+    if orders.exists():
+        for order in orders:
+            cart.orders.remove(order)
+        cart.save()
+
+
+def out_of_stock(cart, request):
+    for order in cart.orders.select_related('product_size_color'):
+        if order.product_size_color.quantity < order.quantity:
+            cart.orders.remove(order)
+            cart.save()
+            messages.error(request, f'موجودی محصول {get_title(order.product_size_color.product.title, length=10)} تمام شده است و از سبد خرید شما حذف شد')
+            return True
+    return False
+
+
+def after_payment(cart, amount, request):
+    orders = cart.orders.all().select_related('product_color__product')
+    # for order in orders:
+    #     order.product_color.stock -= order.count
+    #     order.product_color.product.sales += order.count
+    #     order.product_color.save()
+
+    # cart.paid = True
+    # cart.pay_time = timezone.now()
+    # cart.status = 'sending'
+    # cart.amount_paid = amount
+    
+    # cart.percentage_discount_code = cart.discount_code.percent if cart.discount_code else 0
+
+    # address = cart.address
+    # if address:
+    #     cart.address_text = address.address
+    #     cart.postal_code = address.postal_code
+    #     cart.recipient_name = address.recipient_name
+    #     cart.phone_number = address.phone_number
+    # cart.save()
+
+    # discount_code = cart.discount_code
+    # if discount_code:
+    #     discount_code.users.add(request.user)
+    #     discount_code.count -= 1
+    #     discount_code.save()
 

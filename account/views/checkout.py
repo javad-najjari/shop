@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib import messages
-from utils import get_user_cart, get_user_orders, get_user_address_information
+from utils import get_user_cart, get_user_address_information, out_of_stock
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -13,9 +13,13 @@ class CheckoutView(LoginRequiredMixin, View):
         context = {}
         user = self.request.user
         cart = get_user_cart(user)
-        orders = get_user_orders(user=user)
+        orders = cart.orders.all()
         context['cart'] = cart
         context['orders'] = orders.filter(quantity__gt=0).order_by('product_size_color__product__title')
+
+        if out_of_stock(cart, request):
+            return redirect('account:cart')
+
 
         current_cart = user.carts.filter(paid=False).last()
         previous_cart = user.carts.filter(paid=True).last()
