@@ -767,3 +767,40 @@ span.custom-circle {
   
 }
  */
+
+
+
+ .horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+
+.dropdown-item {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 5px 10px 10px;
+}
+
+
+.dropdown-item-on-pc {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px 5px 10px 10px;
+  display: block;
+}
+
+
+.active-filter {
+  color: white;
+  background-color: #F44336;
+  border-radius: 10px;
+}
+
+
+@media (min-width: 768px) {
+  .mobile-filter {
+      display: none !important;
+  }
+}
