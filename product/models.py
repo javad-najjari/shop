@@ -24,7 +24,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255, unique=True)
-    introduction = models.TextField()
+    properties = models.TextField()
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
     cover = ResizedImageField(upload_to='product_cover', force_format='WEBP', quality=100, size=[800, 800])
@@ -37,10 +37,11 @@ class Product(models.Model):
     public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # available = models.BooleanField(default=False)
-
     def __str__(self):
         return get_title(self.title)
+    
+    def get_properties(self):
+        return self.properties.split('-')
     
     def quantity(self):
         return sum(obj.quantity for obj in self.size_color.all())

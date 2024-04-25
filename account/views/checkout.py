@@ -52,7 +52,7 @@ class CheckoutView(LoginRequiredMixin, View):
         cart = user.carts.filter(paid=False).last()
 
         cart.order_description = description
-        cart.address_text = address
+        cart.address = address
         cart.postal_code = postal_code
         cart.recipient_name = recipient_name
         cart.phone_number = phone

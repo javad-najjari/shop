@@ -1,6 +1,6 @@
 from django.views import generic
 from ..models import Product
-from utils import filtering
+from utils import product_filtering
 
 
 
@@ -13,8 +13,10 @@ class ProductListView(generic.ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        return filtering(queryset=Product.objects.filter(public=True), request=self.request)
+        return product_filtering(queryset=Product.objects.filter(public=True), request=self.request)
     
     def get_paginate_by(self, queryset):
-        return self.request.GET.get(self.paginate_by_param) or self.paginate_by
+        paginate_param = self.request.GET.get(self.paginate_by_param, None)
+
+        return paginate_param if paginate_param in ['9', '12', '15'] else self.paginate_by
 

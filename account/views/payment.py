@@ -87,15 +87,15 @@ class PaymentVerifyView(View):
             response = response.json()
 
             if response['Status'] == 100:
-                after_payment(cart, amount, request)
+                after_payment(cart, amount)
                 Payment.objects.create(
                     user = request.user,
-                    order_code = cart.order_code,
+                    cart = cart,
                     amount = amount,
-                    ref_id = response['RefID'],
+                    ref_id = response.get('RefID', None),
                 )
-                return redirect('https://yalfan.com/profile/orders')
+                return redirect('http://localhost:8000/profile/orders/')
             else:
-                return redirect(config('CALLBACKURLFAIL', None))
-        return redirect(config('CALLBACKURLFAIL', None))
+                return redirect('http://localhost:8000/profile/orders/')
+        return redirect('http://localhost:8000/profile/orders/')
 

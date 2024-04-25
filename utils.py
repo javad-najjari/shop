@@ -94,23 +94,34 @@ def format_price(number, lang='en'):
     return persian_numbers_converter(",".join(formatted_parts)[::-1])
 
 
-def filtering(queryset, request):
+def ordering_by_existing_products(queryset):
+    from product.models import ProductSizeColor
+    queryset_ids = ProductSizeColor.objects.filter(product__in=[q.id for q in queryset], quantity__gt=0).values_list('product', flat=True)
+    return sorted(queryset, key=lambda x:x.id in queryset_ids, reverse=True)
+
+
+def product_filtering(queryset, request):
     category, search = request.GET.get('category'), request.GET.get('search')
+    sort = request.GET.get('sort')
+
     if category:
         queryset = queryset.filter(category__title=category)
     
     if search:
         queryset = queryset.filter(title__icontains=search)
     
-    sort = request.GET.get('sort')
     if sort:
         sort_keys = {
-            '1': '-created_at',
-            '2': 'created_at',
-            '3': 'price',
-            '4': '-price',
+            '1': 'price',
+            '2': '-price',
+            '3': '-created_at',
+            '4': 'created_at',
+            '5': 'exist',
+            '6': '-sales_count'
         }
-        if sort in sort_keys:
+        if sort == '5':
+            queryset = ordering_by_existing_products(queryset)
+        elif sort in sort_keys:
             queryset = queryset.order_by(sort_keys[sort])
     
     return queryset
@@ -226,14 +237,14 @@ def get_user_address_information(user, current_cart, previous_cart):
             return {
                 'recipient_name': current_cart.recipient_name,
                 'phone_number': current_cart.phone_number,
-                'address': current_cart.address_text,
+                'address': current_cart.address,
                 'postal_code': current_cart.postal_code,
             }
         elif previous_cart:
             return {
                 'recipient_name': previous_cart.recipient_name,
                 'phone_number': previous_cart.phone_number,
-                'address': previous_cart.address_text,
+                'address': previous_cart.address,
                 'postal_code': previous_cart.postal_code,
             }
         else:
@@ -263,31 +274,18 @@ def out_of_stock(cart, request):
     return False
 
 
-def after_payment(cart, amount, request):
-    orders = cart.orders.filter(quantity__gt=0).select_related('product_color__product')
-    # for order in orders:
-    #     order.product_color.stock -= order.count
-    #     order.product_color.product.sales += order.count
-    #     order.product_color.save()
+def after_payment(cart, amount):
+    orders = cart.orders.filter(quantity__gt=0).select_related('product_size_color__product')
+    for order in orders:
+        psc = order.product_size_color
+        psc.quantity -= order.quantity
+        psc.product.sales_count += order.quantity
+        psc.save()
+        psc.product.save()
 
-    # cart.paid = True
-    # cart.pay_time = timezone.now()
-    # cart.status = 'sending'
-    # cart.amount_paid = amount
-    
-    # cart.percentage_discount_code = cart.discount_code.percent if cart.discount_code else 0
-
-    # address = cart.address
-    # if address:
-    #     cart.address_text = address.address
-    #     cart.postal_code = address.postal_code
-    #     cart.recipient_name = address.recipient_name
-    #     cart.phone_number = address.phone_number
-    # cart.save()
-
-    # discount_code = cart.discount_code
-    # if discount_code:
-    #     discount_code.users.add(request.user)
-    #     discount_code.count -= 1
-    #     discount_code.save()
+    cart.paid = True
+    cart.pay_time = timezone.now()
+    cart.status = 'sending'
+    cart.amount_paid = amount
+    cart.save()
 

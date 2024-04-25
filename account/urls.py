@@ -19,7 +19,7 @@ urlpatterns = [
 
     # profile
     path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('profile/orders', views.OrderHistoryView.as_view(), name='orders'),
+    path('profile/orders/', views.OrderHistoryView.as_view(), name='orders'),
 
     # contact us
     path('contact-us/', views.ContactUsView.as_view(), name='contact-us'),

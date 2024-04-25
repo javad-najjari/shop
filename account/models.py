@@ -68,7 +68,7 @@ class Cart(models.Model):
     order_description = models.TextField(null=True, blank=True)
 
     # Address
-    address_text = models.TextField(blank=True)
+    address = models.TextField(blank=True)
     postal_code = models.CharField(max_length=20, null=True, blank=True)
     recipient_name = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
@@ -106,7 +106,7 @@ class Cart(models.Model):
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    order_code = models.CharField(max_length=10)
+    cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     amount = models.CharField(max_length=50)
     ref_id = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
