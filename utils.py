@@ -148,7 +148,8 @@ def get_user_cart(user):
 
 
 def get_quantity_in_cart(product_size_color_id, user):
-    orders = get_user_cart(user).orders.all()
+    cart = get_user_cart(user)
+    orders = cart.orders.all() if cart else None
 
     if orders:
         order = orders.filter(product_size_color__id=product_size_color_id)
