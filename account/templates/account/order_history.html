@@ -39,7 +39,9 @@
                         <div class="d-flex flex-wrap justify-content-start mt-3">
                             {% for image in cart.order_images %}
                                 <div class="image-wrapper mr-2">
-                                    <img src="{{ image }}" class="img-fluid mb-1" style="width: 40px;">
+                                    <a href="{% url 'product:detail' image.product_title %}">
+                                        <img src="{{ image.image }}" class="img-fluid mb-1" style="width: 40px;">
+                                    </a>
                                 </div>
                             {% endfor %}
                         </div>

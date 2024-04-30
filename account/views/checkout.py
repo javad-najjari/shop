@@ -13,6 +13,11 @@ class CheckoutView(LoginRequiredMixin, View):
         context = {}
         user = self.request.user
         cart = get_user_cart(user)
+
+        if cart.empty_orders():
+            messages.error(request, 'سبد خرید شما خالیست')
+            return redirect('account:cart')
+
         orders = cart.orders.all()
         context['cart'] = cart
         context['orders'] = orders.filter(quantity__gt=0).order_by('product_size_color__product__title')

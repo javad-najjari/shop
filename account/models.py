@@ -100,7 +100,17 @@ class Cart(models.Model):
         return persian_numbers_converter(str(self.order_code))
     
     def order_images(self):
-        return [order.product_size_color.product.cover.url for order in self.orders.filter(paid=True)]
+        images = []
+        for order in self.orders.filter(paid=True):
+            product = order.product_size_color.product
+            images.append({
+                'image': product.cover.url,
+                'product_title': product.title
+            })
+        return images
+    
+    def empty_orders(self):
+        return sum(order.quantity for order in self.orders.all()) == 0
 
 
 
@@ -108,7 +118,7 @@ class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     amount = models.CharField(max_length=50)
-    ref_id = models.CharField(max_length=50)
+    ref_id = models.CharField(max_length=50, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
 

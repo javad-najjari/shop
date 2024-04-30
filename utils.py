@@ -278,9 +278,11 @@ def out_of_stock(cart, request):
 def after_payment(cart, amount):
     orders = cart.orders.filter(quantity__gt=0).select_related('product_size_color__product')
     for order in orders:
+        order.paid = True
         psc = order.product_size_color
         psc.quantity -= order.quantity
         psc.product.sales_count += order.quantity
+        order.save()
         psc.save()
         psc.product.save()
 
