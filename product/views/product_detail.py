@@ -21,7 +21,7 @@ class ProductDetailView(generic.DetailView):
         context['images'] = ProductImage.objects.filter(product=obj)
         context['cart'] = get_user_cart(self.request.user)
         
-        product_size_colors = list(obj.size_color.select_related('size', 'color'))
+        product_size_colors = list(obj.size_color.filter(quantity__gt=0).select_related('size', 'color'))
         type_id = self.request.GET.get('type_id')
         if type_id:
             product_size_colors = sorted(product_size_colors, key=custom_sort_key(type_id))

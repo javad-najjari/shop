@@ -21,6 +21,7 @@ class ProductSizeColorInline(admin.StackedInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    save_on_top = True
     list_display = (
         'product_title', 'get_cover', 'category', 'get_purchase_price', 'get_price', 'after_discount', 'profit',
         'sales_count', 'get_discount', 'kinds', 'public'

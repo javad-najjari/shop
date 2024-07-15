@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
 
     # packages
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,13 @@ LOGIN_URL = '/account/login/'
 
 
 SMS_VALIDITY_SECONDS = 130
+
+
+
+# CKEDITOR
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': 'codesnippet',
+    }
+}

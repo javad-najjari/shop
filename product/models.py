@@ -1,9 +1,9 @@
 from django.db import models
-from django.db.models import Exists, OuterRef
 from django.core.validators import MaxValueValidator
 from django.core.exceptions import ValidationError
 from django_resized import ResizedImageField
 from utils import get_title, format_price
+from ckeditor.fields import RichTextField
 
 
 
@@ -25,7 +25,7 @@ class Category(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=255, unique=True)
     properties = models.TextField()
-    description = models.TextField()
+    description = RichTextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
     cover = ResizedImageField(upload_to='product_cover', force_format='WEBP', quality=100, size=[800, 800])
 
