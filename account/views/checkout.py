@@ -48,7 +48,7 @@ class CheckoutView(LoginRequiredMixin, View):
             messages.error(request, 'فیلدهای ضروری را پر کنید')
             return redirect('account:checkout')
         elif not (phone.isdigit() and (postal_code.isdigit() if postal_code else True)):
-            messages.error(request, 'شماره تلفن و کدملی باید عدد باشند')
+            messages.error(request, 'شماره تلفن و کدپستی باید عدد باشند')
             return redirect('account:checkout')
         elif city not in ['گرمه', 'جاجرم', 'ایور', 'درق']:
             messages.error(request, 'شهر انتخابی اشتباه است')
