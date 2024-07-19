@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     # packages
     'ckeditor',
+    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -39,6 +40,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -141,3 +144,15 @@ CKEDITOR_CONFIGS = {
         'extraPlugins': 'codesnippet',
     }
 }
+
+
+
+
+# # DEBUG TOOLBAR
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
+
+# DEBUG_TOOLBAR_CONFIG = {
+#     'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+# }

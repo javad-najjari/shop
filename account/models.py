@@ -85,7 +85,7 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def total_price(self):
-        return sum(order.total_price() for order in self.orders.filter(paid=False))
+        return sum(order.total_price() for order in self.orders.filter(paid=False).select_related('product_size_color__product'))
     
     def total_price_fa(self):
         return format_price(self.total_price(), lang='fa')
@@ -101,7 +101,7 @@ class Cart(models.Model):
     
     def order_images(self):
         images = []
-        for order in self.orders.filter(paid=True):
+        for order in self.orders.select_related('product_size_color__product').filter(paid=True):
             product = order.product_size_color.product
             images.append({
                 'image': product.cover.url,

@@ -233,26 +233,25 @@ def persian_date(date):
 
 def get_user_address_information(user, current_cart, previous_cart):
     
-
-        if current_cart and current_cart.recipient_name:
-            return {
-                'recipient_name': current_cart.recipient_name,
-                'phone_number': current_cart.phone_number,
-                'address': current_cart.address,
-                'postal_code': current_cart.postal_code,
-            }
-        elif previous_cart:
-            return {
-                'recipient_name': previous_cart.recipient_name,
-                'phone_number': previous_cart.phone_number,
-                'address': previous_cart.address,
-                'postal_code': previous_cart.postal_code,
-            }
-        else:
-            return {
-                'recipient_name': user.name,
-                'phone_number': user.phone_number,
-            }
+    if current_cart and current_cart.recipient_name:
+        return {
+            'recipient_name': current_cart.recipient_name,
+            'phone_number': current_cart.phone_number,
+            'address': current_cart.address,
+            'postal_code': current_cart.postal_code,
+        }
+    elif previous_cart:
+        return {
+            'recipient_name': previous_cart.recipient_name,
+            'phone_number': previous_cart.phone_number,
+            'address': previous_cart.address,
+            'postal_code': previous_cart.postal_code,
+        }
+    else:
+        return {
+            'recipient_name': user.name,
+            'phone_number': user.phone_number,
+        }
 
 
 def clean_cart(cart):

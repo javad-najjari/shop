@@ -13,6 +13,6 @@ class CartView(LoginRequiredMixin, TemplateView):
         cart = get_user_cart(self.request.user)
         orders = cart.orders.all()
         context['cart'] = cart
-        context['orders'] = orders.filter(quantity__gt=0).order_by('product_size_color__product__title')
+        context['orders'] = orders.filter(quantity__gt=0).select_related('product_size_color__product').order_by('product_size_color__product__title')
         return context
 

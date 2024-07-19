@@ -4,6 +4,8 @@ from utils import format_price, get_user_cart
 
 def cart_detail(request):
     
+    # TODO: It must be stored in redis
+    
     if request.user.is_authenticated:
         orders = get_user_cart(request.user).orders.all()
         if orders:
