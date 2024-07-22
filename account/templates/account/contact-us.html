@@ -10,21 +10,19 @@
             <div class="col-lg-7 mb-5">
                 <div class="contact-form bg-light p-30">
                     <div id="success"></div>
-                    <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+
                         <div class="control-group">
-                            <input type="text" class="form-control" id="name" placeholder="نام شما"
-                                required="required" data-validation-required-message="لطفا نام خود را وارد کنید" />
+                            <input type="text" class="form-control" name="name" placeholder="نام شما" required value="{{ name }}"/>
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="subject" placeholder="موضوع"
-                                required="required" data-validation-required-message="لطفا موضوع پیام را وارد کنید" />
+                            <input type="text" class="form-control" name="title" placeholder="موضوع" required value="{{ title }}"/>
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <textarea class="form-control" rows="8" id="message" placeholder="متن پیام"
-                                required="required"
-                                data-validation-required-message="لطفا متن پیام خود را بنویسید"></textarea>
+                            <textarea class="form-control" rows="8" name="text" placeholder="متن پیام" required value="{{ text }}"></textarea>
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>

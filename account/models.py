@@ -131,3 +131,13 @@ class OTPCode(models.Model):
     def is_valid(self):
         return validate_time(self.created)
 
+
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=500)
+    text = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'contact us'
+

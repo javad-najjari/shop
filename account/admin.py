@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import User, Order, Cart, Payment, OTPCode
-from utils import elapsed_time
+from .models import User, Order, Cart, Payment, OTPCode, ContactUs
+from utils import elapsed_time, get_title
 
 
 
@@ -40,9 +40,20 @@ class OTPCodeAdmin(admin.ModelAdmin):
 
 
 
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'title', 'get_text')
+
+    def get_text(self, obj):
+        return get_title(obj.text)
+    get_text.short_descripton = 'text'
+
+
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Payment)
 admin.site.register(OTPCode, OTPCodeAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)
 admin.site.unregister(Group)
